@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1FinForce — One Platform. Total Business Visibility.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ── Brand palette derived from brand reference ── */
+    --navy:        #07111C;       /* deepest bg */
+    --navy-mid:    #0C1D30;       /* card/surface */
+    --navy-light:  #132540;       /* elevated surface */
+    --steel:       #3EA8E0;       /* primary accent — brand blue */
+    --steel-dim:   rgba(62,168,224,0.14);
+    --steel-b:     rgba(62,168,224,0.28);
+    --khaki:       #B8A476;       /* warm accent — brand khaki/olive */
+    --khaki-dim:   rgba(184,164,118,0.14);
+    --khaki-b:     rgba(184,164,118,0.28);
+    --charcoal:    #4A4A52;       /* muted grey accent */
+    --offwhite:    #D4CFC4;       /* soft cream text/detail */
+    --white:       #FFFFFF;
+    --t1:          #FFFFFF;
+    --t2:          rgba(255,255,255,0.62);
+    --t3:          rgba(255,255,255,0.36);
+    --border:      rgba(255,255,255,0.07);
+    --border2:     rgba(255,255,255,0.13);
+    --card:        rgba(255,255,255,0.04);
+    --card-h:      rgba(255,255,255,0.07);
+    --T:           0.25s cubic-bezier(0.4,0,0.2,1);
+    --r:10px; --rl:16px; --rxl:20px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+
+  /* ── GLOBAL BACKGROUND ──
+     Deep SA night-sky navy at top, warming subtly to near-black at bottom.
+     Layered glows: cool blue top-left (tech), warm gold bottom-right (SA warmth).
+     Fixed so it shows through all sections as one unified canvas.
+  ── */
+  body{
+    font-family:'DM Sans',-apple-system,sans-serif;
+    color:var(--t1);
+    line-height:1.6;
+    overflow-x:hidden;
+    font-size:15px;
+    background:#07111C;
+  }
+
+  /* Multi-point glow canvas — vivid, asymmetric, alive */
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      /* electric blue — top left, dominant */
+      radial-gradient(ellipse 65% 55% at -5% 8%,  rgba(30,120,220,0.38) 0%, transparent 60%),
+      /* cyan-teal punch — top right */
+      radial-gradient(ellipse 45% 40% at 105% 5%,  rgba(0,180,200,0.18) 0%, transparent 55%),
+      /* warm gold whisper — mid right, grounding */
+      radial-gradient(ellipse 35% 30% at 100% 55%, rgba(200,150,40,0.10) 0%, transparent 50%),
+      /* deep indigo base bloom — centre */
+      radial-gradient(ellipse 80% 60% at 50% 30%,  rgba(20,60,140,0.22) 0%, transparent 65%);
+    pointer-events:none;
+    z-index:0;
+  }
+  body>*{position:relative;z-index:1;}
+  h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+  .page{display:none;animation:fi .3s ease;}
+  .page.active{display:block;}
+  @keyframes fi{from{opacity:0;}to{opacity:1;}}
+
+  /* ── NAV ── */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;background:rgba(7,17,28,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background var(--T);}
+  .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white);cursor:pointer;text-decoration:none;letter-spacing:-0.02em;}
+  .lm{width:30px;height:30px;border-radius:8px;background:var(--steel);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:var(--navy);}
+  .nav-c{display:flex;align-items:center;gap:.25rem;position:absolute;left:50%;transform:translateX(-50%);}
+  .nav-c a{color:var(--t2);text-decoration:none;font-size:.875rem;padding:.4rem .9rem;border-radius:8px;transition:all var(--T);cursor:pointer;}
+  .nav-c a:hover{color:var(--white);background:rgba(255,255,255,0.07);}
+  .nav-r{display:flex;align-items:center;gap:.75rem;}
+  .nav-login{color:var(--t2);text-decoration:none;font-size:.875rem;padding:.4rem .75rem;transition:color var(--T);}
+  .nav-login:hover{color:var(--white);}
+  .btn-nav{background:var(--steel);color:var(--navy);padding:.5rem 1.1rem;border-radius:8px;font-family:'Syne',sans-serif;font-size:.875rem;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:all var(--T);}
+  .btn-nav:hover{background:#5BA3CC;transform:translateY(-1px);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
+  .hamburger span{width:20px;height:1.5px;background:var(--white);border-radius:2px;}
+  .mob-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(7,17,28,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1.5rem 5%;flex-direction:column;gap:1rem;z-index:199;}
+  .mob-menu.open{display:flex;}
+  .mob-menu a{color:var(--t2);text-decoration:none;font-size:.95rem;cursor:pointer;transition:color var(--T);}
+  .mob-menu a:hover{color:var(--white);}
+  @media(max-width:820px){.nav-c{display:none;}.hamburger{display:flex;}.nav-r .btn-nav{display:none;}}
+
+  /* ── SHARED ── */
+  .C{max-width:1120px;margin:0 auto;padding:0 5%;}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);background:var(--steel-dim);border:1px solid var(--steel-b);padding:.3rem .85rem;border-radius:100px;margin-bottom:1.25rem;}
+  .tag::before{content:'';width:18px;height:2px;background:var(--steel);}
+  .stitle{font-size:clamp(1.9rem,3.8vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.1;}
+  .ssub{font-size:1.05rem;color:var(--t2);line-height:1.75;max-width:580px;}
+  section{padding:7rem 0;}
+
+  .btn-p{background:var(--steel);color:var(--navy);padding:.8rem 1.85rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.925rem;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:all var(--T);display:inline-flex;align-items:center;gap:6px;letter-spacing:-.01em;}
+  .btn-p:hover{background:#5BA3CC;transform:translateY(-2px);box-shadow:0 8px 30px rgba(62,168,224,0.28);}
+  .btn-g{background:transparent;color:var(--t2);padding:.78rem 1.35rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.925rem;font-weight:600;text-decoration:none;border:1px solid var(--border2);cursor:pointer;transition:all var(--T);display:inline-flex;align-items:center;gap:6px;}
+  .btn-g:hover{color:var(--white);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05);}
+  .btn-k{background:var(--khaki);color:var(--navy);padding:.8rem 1.85rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.925rem;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:all var(--T);display:inline-flex;align-items:center;gap:6px;}
+  .btn-k:hover{background:#C9BB9E;transform:translateY(-2px);}
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;display:flex;align-items:center;padding:7rem 0 5rem;position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;pointer-events:none;}
+  .hero-bg::before{content:'';position:absolute;top:-20%;left:40%;width:700px;height:600px;border-radius:50%;background:radial-gradient(ellipse,rgba(74,144,184,0.1) 0%,transparent 60%);}
+  .hero-bg::after{content:'';position:absolute;bottom:-10%;right:-5%;width:400px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(62,168,224,0.07) 0%,transparent 52%);}
+  /* diamond pattern overlay */
+  .hero-pattern{position:absolute;inset:0;opacity:0.04;pointer-events:none;background-image:repeating-linear-gradient(45deg,var(--steel) 0,var(--steel) 1px,transparent 0,transparent 50%);background-size:28px 28px;}
+
+  .hero-in{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+  @media(max-width:860px){.hero-in{grid-template-columns:1fr;}.hv{display:none;}}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;color:var(--t2);background:rgba(255,255,255,.06);border:1px solid var(--border2);padding:.35rem .85rem;border-radius:100px;margin-bottom:1.5rem;letter-spacing:.02em;}
+  .dot-pulse{width:6px;height:6px;border-radius:50%;background:var(--steel);animation:pulse 2.5s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  .hero h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:800;letter-spacing:-.05em;line-height:1.08;margin-bottom:1.5rem;}
+  .hero h1 em{font-style:normal;color:var(--steel);}
+  .hero-sub{font-size:1.1rem;color:var(--t2);line-height:1.75;margin-bottom:2.5rem;max-width:460px;}
+  .hero-ctas{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:3rem;}
+  .hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .hs-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.03em;}
+  .hs-lbl{font-size:.75rem;color:var(--t3);margin-top:2px;}
+
+  /* ── DASH MOCKUP ── */
+  .dash{background:var(--navy-mid);border:1px solid var(--border2);border-radius:var(--rxl);overflow:hidden;box-shadow:0 0 0 1px rgba(62,168,224,.12),0 40px 80px rgba(0,0,0,.5);position:relative;}
+  .dash-bar{background:var(--navy-light);padding:.7rem 1rem;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);}
+  .dd{width:9px;height:9px;border-radius:50%;}
+  .dd.r{background:#ff5f57;}.dd.y{background:#febc2e;}.dd.g{background:#28c840;}
+  .dash-url{flex:1;background:rgba(255,255,255,.05);border-radius:6px;padding:.25rem .75rem;font-size:.68rem;color:var(--t3);margin-left:.5rem;}
+  .dash-body{padding:1.25rem;}
+  .dash-layout{display:grid;grid-template-columns:110px 1fr;gap:.75rem;}
+  .ds{display:flex;flex-direction:column;gap:3px;}
+  .ds-sec{font-size:.55rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.2);padding:.5rem .6rem .2rem;}
+  .ds-item{font-size:.65rem;padding:.4rem .6rem;border-radius:6px;color:var(--t3);cursor:default;transition:all var(--T);}
+  .ds-item.on{background:var(--steel-dim);color:var(--steel);font-weight:600;border:1px solid var(--steel-b);}
+  .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.75rem;}
+  .kpi{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:.65rem .75rem;}
+  .kpi-lbl{font-size:.58rem;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;}
+  .kpi-val{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:-.02em;}
+  .kv-s{color:var(--steel);}.kv-k{color:var(--khaki);}
+  .kpi-chg{font-size:.58rem;color:var(--steel);margin-top:2px;}
+  .kpi-chg.warn{color:var(--khaki);}
+  .dash-chart{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:.75rem .75rem .5rem;margin-bottom:.75rem;}
+  .dc-lbl{font-size:.6rem;color:var(--t3);margin-bottom:.6rem;}
+  .bars{display:flex;align-items:flex-end;gap:4px;height:60px;}
+  .bar{flex:1;border-radius:3px 3px 0 0;background:rgba(74,144,184,0.2);}
+  .bar.hi{background:var(--steel);}
+  .bar.k{background:rgba(184,169,138,0.4);}
+  .dtable{width:100%;border-collapse:collapse;font-size:.65rem;}
+  .dtable th{color:var(--t3);text-align:left;padding:.3rem .4rem;border-bottom:1px solid var(--border);font-weight:500;}
+  .dtable td{padding:.4rem .4rem;color:rgba(255,255,255,.75);border-bottom:1px solid rgba(255,255,255,.04);}
+  .badge{display:inline-flex;padding:2px 6px;border-radius:100px;font-size:.58rem;font-weight:700;}
+  .ok{background:rgba(74,144,184,.15);color:var(--steel);}
+  .low{background:rgba(184,169,138,.15);color:var(--khaki);}
+  .transit{background:rgba(255,255,255,.08);color:var(--t2);}
+
+  /* floating pills */
+  .fpill{position:absolute;background:var(--navy-light);border:1px solid var(--border2);border-radius:12px;padding:.65rem .9rem;font-size:.7rem;box-shadow:0 12px 40px rgba(0,0,0,.4);animation:fly 4s ease-in-out infinite;}
+  .fpill.a{left:-55px;bottom:80px;}
+  .fpill.b{right:-50px;top:60px;animation-delay:2s;}
+  @keyframes fly{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .fp-lbl{color:var(--t3);font-size:.58rem;margin-bottom:3px;}
+  .fp-val{font-family:'Syne',sans-serif;font-weight:700;}
+  .fp-sub{color:var(--steel);font-size:.58rem;margin-top:3px;}
+
+  /* ── KPI IMPACT STRIP ── */
+  .kpi-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0;background:rgba(255,255,255,0.03);}
+  .kpi-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+  .ksi{padding:3rem 2.5rem;transition:background var(--T);position:relative;}
+  .ksi:hover{background:rgba(74,144,184,0.05);}
+  .ksi::after{content:'';position:absolute;top:20%;right:0;width:1px;height:60%;background:var(--border);}
+  .ksi:last-child::after{display:none;}
+  .ksi-mid{border-left:1px solid var(--border);border-right:1px solid var(--border);}
+  .ksi-mid::after{display:none;}
+  .ksi-val{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;}
+  .ksi-lbl{font-size:.95rem;font-weight:700;color:var(--t1);margin-bottom:.5rem;line-height:1.3;letter-spacing:-.01em;}
+  .ksi-sub{font-size:.82rem;color:var(--t3);line-height:1.6;max-width:260px;}
+  @media(max-width:860px){
+    .kpi-strip-grid{grid-template-columns:1fr;}
+    .ksi::after{display:none;}
+    .ksi-mid{border-left:none;border-right:none;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .ksi{padding:2rem 1.75rem;}
+    .ksi-val{font-size:2.4rem;}
+    .ksi-sub{max-width:100%;}
+  }
+  @media(max-width:480px){
+    .ksi{padding:1.75rem 1.25rem;}
+    .ksi-val{font-size:2rem;}
+    .ksi-lbl{font-size:.875rem;}
+    .ksi-sub{font-size:.78rem;}
+  }
+
+  /* ── SOCIAL PROOF STRIP ── */
+  .spstrip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 0;background:rgba(255,255,255,0.02);}
+  .spstrip-inner{display:grid;grid-template-columns:1fr 1.4fr;gap:3.5rem;align-items:center;margin-bottom:2.5rem;}
+  .spstrip-tag{font-size:.75rem;font-weight:600;color:var(--t3);margin-bottom:.85rem;letter-spacing:.02em;}
+  .spstrip-title{font-family:'Syne',sans-serif;font-size:clamp(1.3rem,2.5vw,1.75rem);font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-bottom:.85rem;}
+  .spstrip-sub{font-size:.875rem;color:var(--t2);line-height:1.7;max-width:340px;}
+  .spstrip-cards{display:flex;flex-direction:column;gap:.75rem;}
+  .spcard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:flex-start;gap:.85rem;transition:all var(--T);}
+  .spcard:hover{border-color:var(--border2);background:var(--card-h);}
+  .spcard-solved{background:rgba(74,144,184,.07);border-color:var(--steel-b);}
+  .spcard-icon{font-size:1rem;flex-shrink:0;margin-top:1px;}
+  .spcard-text{font-size:.875rem;color:var(--t2);line-height:1.5;font-style:italic;}
+  .spcard-solved .spcard-text{font-style:normal;font-weight:600;}
+  .spcard-role{font-size:.72rem;color:var(--t3);margin-top:.35rem;}
+  .spstrip-pills{display:flex;flex-wrap:wrap;gap:.6rem;padding-top:2rem;border-top:1px solid var(--border);}
+  .sppill{font-size:.78rem;font-weight:500;color:var(--t2);background:rgba(255,255,255,.05);border:1px solid var(--border);padding:.35rem .85rem;border-radius:100px;transition:all var(--T);}
+  .sppill:hover{color:var(--white);border-color:var(--border2);background:rgba(255,255,255,.08);}
+  @media(max-width:760px){
+    .spstrip-inner{grid-template-columns:1fr;gap:2rem;}
+    .spstrip-sub{max-width:100%;}
+  }
+  @media(max-width:640px){
+    .spstrip{padding:3rem 0;}
+    .spstrip-title{font-size:1.3rem;}
+    .spstrip-pills{gap:.5rem;}
+    .sppill{font-size:.72rem;padding:.3rem .7rem;}
+  }
+
+  /* ── PROBLEM STRIP ── */
+  .prob-strip{background:rgba(255,255,255,0.025);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 0;}
+  .prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);}
+  .prob-card{background:rgba(255,255,255,0.04);padding:2rem 1.75rem;transition:background var(--T);}
+  .prob-card:hover{background:var(--card-h);}
+  .prob-icon{font-size:1.25rem;margin-bottom:.75rem;}
+  .prob-card h4{font-size:.9rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem;}
+  .prob-card p{font-size:.82rem;color:var(--t2);line-height:1.65;}
+
+  /* ── BENTO ── */
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;}
+  .bc{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2rem;transition:all var(--T);}
+  .bc:hover{border-color:rgba(74,144,184,.35);background:var(--card-h);transform:translateY(-2px);}
+  .bc8{grid-column:span 8;}.bc4{grid-column:span 4;}.bc6{grid-column:span 6;}
+  @media(max-width:860px){.bc8,.bc4,.bc6{grid-column:span 12;}}
+  .bico{width:40px;height:40px;border-radius:10px;background:var(--steel-dim);border:1px solid var(--steel-b);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:1.25rem;}
+  .bc h3{font-size:1.05rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.6rem;}
+  .bc p{font-size:.875rem;color:var(--t2);line-height:1.65;}
+  .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.85rem;}
+  .chip{font-size:.7rem;padding:.28rem .65rem;border-radius:100px;background:var(--steel-dim);border:1px solid var(--steel-b);color:var(--steel);font-weight:600;letter-spacing:.02em;}
+  .chip.k{background:var(--khaki-dim);border-color:var(--khaki-b);color:var(--khaki);}
+  .big-num{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-.05em;color:var(--steel);line-height:1;margin-bottom:.4rem;}
+
+  /* ── KPI TABS ── */
+  .kpi-section{background:rgba(255,255,255,0.02);}
+  .kpi-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+  .ktab{padding:.55rem 1.1rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;background:transparent;border:1px solid var(--border);color:var(--t3);cursor:pointer;transition:all var(--T);}
+  .ktab:hover{color:var(--white);border-color:var(--border2);}
+  .ktab.on{background:var(--steel);border-color:var(--steel);color:var(--navy);font-weight:700;}
+  .kpi-panel{display:none;}
+  .kpi-panel.on{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;}
+  .kcard{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;transition:all var(--T);}
+  .kcard:hover{border-color:rgba(74,144,184,.3);transform:translateY(-2px);}
+  .kcard-icon{font-size:1.2rem;margin-bottom:.75rem;}
+  .kcard h4{font-size:.9rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem;}
+  .kcard p{font-size:.82rem;color:var(--t2);line-height:1.65;}
+
+  /* ── HOW IT WORKS ── */
+  .flow-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:3.5rem;align-items:start;}
+  @media(max-width:860px){.flow-wrap{grid-template-columns:1fr;}}
+  .flow-step{display:flex;gap:1.25rem;padding:1.5rem 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all var(--T);}
+  .flow-step:last-child{border-bottom:none;}
+  .fs-num{width:32px;height:32px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--t3);flex-shrink:0;transition:all var(--T);}
+  .flow-step.on .fs-num{background:var(--steel);border-color:var(--steel);color:var(--navy);}
+  .fs-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.35rem;color:var(--t2);transition:color var(--T);}
+  .flow-step.on .fs-title{color:var(--white);}
+  .fs-desc{font-size:.85rem;color:var(--t3);line-height:1.65;}
+  .flow-step.on .fs-desc{color:var(--t2);}
+
+  .flow-vis{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2rem;min-height:280px;display:flex;flex-direction:column;justify-content:center;}
+  .fv-tag{font-size:.68rem;font-weight:700;color:var(--steel);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.85rem;}
+  .fv-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.75rem;}
+  .fv-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;}
+  .fv-list li{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:var(--t2);}
+  .fv-ck{color:var(--steel);flex-shrink:0;}
+  .fv-kpis{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1.25rem;}
+  .fv-kpi{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:.75rem;}
+  .fv-kpi-lbl{font-size:.62rem;color:var(--t3);margin-bottom:.25rem;}
+  .fv-kpi-val{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--steel);}
+
+  /* ── WHO ── */
+  .who-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;}
+  .who-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.75rem;transition:all var(--T);}
+  .who-card:hover{border-color:rgba(74,144,184,.3);background:var(--card-h);transform:translateY(-2px);}
+  .who-icon{font-size:1.5rem;margin-bottom:1rem;}
+  .who-card h3{font-size:.95rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .who-card p{font-size:.85rem;color:var(--t2);line-height:1.65;}
+
+  /* ── STEPS GRID ── */
+  .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--rxl);overflow:hidden;}
+  .step-card{background:rgba(255,255,255,0.04);padding:2.5rem 2rem;transition:background var(--T);}
+  .step-card:hover{background:var(--card-h);}
+  .step-num{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--steel);text-transform:uppercase;margin-bottom:1rem;}
+  .step-card h3{font-size:1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.6rem;}
+  .step-card p{font-size:.85rem;color:var(--t2);line-height:1.65;}
+
+  /* ── TESTIMONIALS ── */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.25rem;}
+  .tc{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.75rem;transition:all var(--T);}
+  .tc:hover{border-color:rgba(74,144,184,.25);transform:translateY(-2px);}
+  .stars{color:var(--steel);font-size:.85rem;letter-spacing:3px;margin-bottom:1rem;}
+  .tc-text{font-size:.9rem;color:var(--t2);line-height:1.75;margin-bottom:1.5rem;font-style:italic;}
+  .tc-auth{display:flex;align-items:center;gap:10px;}
+  .av{width:36px;height:36px;border-radius:50%;background:var(--steel-dim);border:1px solid var(--steel-b);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--steel);flex-shrink:0;}
+  .av-name{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;}
+  .av-role{font-size:.75rem;color:var(--t3);}
+
+  /* ── FAQ ── */
+  .faq-list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:var(--rxl);overflow:hidden;border:1px solid var(--border);}
+  .fi{background:var(--navy);}
+  .fq{width:100%;text-align:left;padding:1.25rem 1.5rem;background:none;border:none;color:var(--t1);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color var(--T);}
+  .fq:hover{color:var(--steel);}
+  .fchev{font-size:1rem;color:var(--t3);transition:transform .3s ease,color .2s ease;flex-shrink:0;}
+  .fi.open .fchev{transform:rotate(45deg);color:var(--steel);}
+  .fa{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;padding:0 1.5rem;}
+  .fi.open .fa{max-height:240px;padding:0 1.5rem 1.25rem;}
+  .fa p{font-size:.875rem;color:var(--t2);line-height:1.75;}
+
+  /* ── PRICING ── */
+  /* Cards */
+  .pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:820px;margin:0 auto 2.5rem;}
+  .prc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rxl);padding:2.25rem 2rem;position:relative;display:flex;flex-direction:column;}
+  .prc-featured{background:linear-gradient(160deg,rgba(62,168,224,0.12) 0%,rgba(62,168,224,0.04) 100%);border-color:var(--steel-b);box-shadow:0 0 0 1px rgba(62,168,224,.15),0 20px 60px rgba(62,168,224,.1);}
+  .prc-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--steel);color:var(--navy);font-family:'Syne',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:3px 16px;border-radius:100px;text-transform:uppercase;white-space:nowrap;}
+  .prc-name{font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;}
+  .prc-price{display:flex;align-items:baseline;gap:2px;margin-bottom:.6rem;}
+  .prc-currency{font-size:1rem;color:var(--t2);font-weight:500;margin-top:6px;}
+  .prc-amount{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.05em;line-height:1;}
+  .prc-period{font-size:.85rem;color:var(--t3);margin-left:3px;}
+  .prc-desc{font-size:.85rem;color:var(--t2);line-height:1.65;margin-bottom:1.75rem;flex-grow:1;}
+  .prc-features{list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;}
+  .prc-features li{display:flex;align-items:flex-start;gap:10px;font-size:.875rem;color:rgba(255,255,255,.78);line-height:1.45;}
+  .pck{color:var(--steel);flex-shrink:0;font-size:.85rem;}
+  .prc-btn-primary{display:block;text-align:center;padding:.85rem 1rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;background:var(--steel);color:var(--navy);text-decoration:none;border:none;transition:all var(--T);}
+  .prc-btn-primary:hover{background:#5BA3CC;transform:translateY(-1px);}
+  .prc-btn-ghost{display:block;text-align:center;padding:.85rem 1rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;background:transparent;color:var(--white);text-decoration:none;border:1px solid var(--border2);transition:all var(--T);}
+  .prc-btn-ghost:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05);}
+  /* Trust pills */
+  .trust-pills{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;padding-top:2rem;border-top:1px solid var(--border);max-width:820px;margin:0 auto;}
+  .trust-pill{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--t3);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:.38rem .9rem;border-radius:100px;}
+  /* Steps */
+  .pricing-steps{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:start;max-width:860px;margin:0 auto;}
+  .pstep{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2rem 1.5rem;text-align:center;}
+  .pstep-num{width:44px;height:44px;border-radius:50%;background:var(--steel-dim);border:1px solid var(--steel-b);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--steel);}
+  .pstep-title{font-size:.95rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .pstep-desc{font-size:.82rem;color:var(--t2);line-height:1.65;}
+  .pstep-arrow{display:flex;align-items:center;justify-content:center;padding:0 .75rem;font-size:1.2rem;color:var(--t3);margin-top:1.5rem;}
+  /* Mobile pricing */
+  @media(max-width:640px){
+    .pricing-cards{grid-template-columns:1fr;gap:2rem;padding:0;}
+    .prc-card{padding:2rem 1.5rem;}
+    .prc-featured{margin-top:.5rem;}
+    .prc-amount{font-size:2.6rem;}
+    .trust-pills{gap:.5rem;}
+    .trust-pill{font-size:.75rem;padding:.3rem .75rem;}
+    .pricing-steps{grid-template-columns:1fr;gap:1rem;}
+    .pstep-arrow{display:none;}
+    .pstep{padding:1.5rem 1.25rem;text-align:left;}
+    .pstep-num{margin:0 0 .75rem 0;}
+  }
+  @media(min-width:641px) and (max-width:860px){
+    .pricing-cards{grid-template-columns:1fr;max-width:480px;}
+    .prc-featured{margin-top:.5rem;}
+    .pricing-steps{grid-template-columns:1fr;gap:1rem;}
+    .pstep-arrow{display:none;}
+  }
+  .pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:820px;margin:0 auto;}
+  .pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--rxl);padding:2.5rem;position:relative;transition:all var(--T);}
+  .pcard:hover{transform:translateY(-3px);border-color:var(--border2);}
+  .pcard.feat{background:linear-gradient(160deg,rgba(62,168,224,0.12) 0%,rgba(62,168,224,0.04) 100%);border-color:var(--steel-b);box-shadow:0 0 0 1px rgba(62,168,224,.2),0 20px 60px rgba(62,168,224,.1);}
+  .plan-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--steel);color:var(--navy);font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.05em;padding:3px 14px;border-radius:100px;text-transform:uppercase;white-space:nowrap;}
+  .plan-name{font-size:.78rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.25rem;}
+  .plan-price{display:flex;align-items:baseline;gap:2px;margin-bottom:.35rem;}
+  .pc{font-size:1.1rem;color:var(--t2);font-weight:500;margin-top:6px;}
+  .pa{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;letter-spacing:-.05em;}
+  .pp{font-size:.85rem;color:var(--t3);margin-left:2px;}
+  .pd{font-size:.85rem;color:var(--t2);margin-bottom:2rem;line-height:1.65;}
+  .pf{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem;}
+  .pf li{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:rgba(255,255,255,.75);}
+  .ck{color:var(--steel);font-size:.85rem;flex-shrink:0;margin-top:1px;}
+  .cx{color:var(--t3);font-size:.85rem;flex-shrink:0;margin-top:1px;}
+  .pbtn{width:100%;padding:.82rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;text-align:center;transition:all var(--T);border:none;display:block;text-decoration:none;}
+  .pbtn.ps{background:var(--steel);color:var(--navy);}
+  .pbtn.ps:hover{background:#5BA3CC;box-shadow:0 6px 24px rgba(74,144,184,.35);}
+  .pbtn.po{background:transparent;color:var(--white);border:1px solid var(--border2);}
+  .pbtn.po:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05);}
+
+  /* ── CTA BAND ── */
+  .cta-band{text-align:center;padding:7rem 0;position:relative;overflow:hidden;border-top:1px solid var(--border);background:rgba(255,255,255,0.02);}
+  .cta-band::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(62,168,224,0.10) 0%,transparent 62%);pointer-events:none;}
+  .cta-band h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.04em;margin-bottom:1rem;}
+  .cta-band p{font-size:1.05rem;color:var(--t2);max-width:520px;margin:0 auto 2.5rem;line-height:1.75;}
+  .cta-acts{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+
+  /* ── INNER HERO ── */
+  .ih{padding:9rem 0 4rem;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+  .ih::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(62,168,224,0.10) 0%,transparent 58%);pointer-events:none;}
+  .ih h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.05em;margin-bottom:1rem;}
+  .ih p{font-size:1.05rem;color:var(--t2);max-width:520px;margin:0 auto;line-height:1.75;}
+
+  /* ── CONTACT ── */
+  .cw{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;max-width:1060px;margin:0 auto;}
+  @media(max-width:720px){.cw{grid-template-columns:1fr;}}
+  .cl h2{font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:1rem;}
+  .cl p{font-size:.9rem;color:var(--t2);line-height:1.75;margin-bottom:2rem;}
+  .cd{display:flex;align-items:flex-start;gap:12px;margin-bottom:1.25rem;}
+  .cdico{width:34px;height:34px;border-radius:8px;background:var(--steel-dim);border:1px solid var(--steel-b);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+  .cd-lbl{font-size:.7rem;color:var(--t3);}
+  .cd-val{font-size:.875rem;color:var(--t1);}
+  .cn{background:var(--steel-dim);border:1px solid var(--steel-b);border-radius:var(--rl);padding:1.25rem 1.5rem;margin-top:2rem;}
+  .cn-tag{font-size:.68rem;font-weight:700;color:var(--steel);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;}
+  .cn p{font-size:.85rem;color:var(--t2);line-height:1.65;}
+  .cform{background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:var(--rxl);padding:2.5rem;}
+  .cform h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1.5rem;letter-spacing:-.02em;}
+  .fg{margin-bottom:1.1rem;}
+  .fg label{display:block;font-size:.78rem;color:var(--t3);margin-bottom:.45rem;font-weight:500;}
+  .fg input,.fg select,.fg textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:8px;padding:.7rem .9rem;color:var(--t1);font-family:'DM Sans',sans-serif;font-size:.875rem;transition:border-color var(--T);outline:none;}
+  .fg input::placeholder,.fg textarea::placeholder{color:var(--t3);}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--steel);background:rgba(74,144,184,.07);}
+  .fg select option{background:var(--navy-mid);}
+  .fg textarea{min-height:110px;resize:vertical;}
+  .fr{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+  @media(max-width:480px){.fr{grid-template-columns:1fr;}}
+  .fsub{width:100%;padding:.82rem;background:var(--steel);color:var(--navy);border:none;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all var(--T);}
+  .fsub:hover{background:#5BA3CC;box-shadow:0 6px 24px rgba(74,144,184,.35);}
+  .form-ok{display:none;text-align:center;padding:3rem 1rem;}
+  .form-ok-icon{font-size:2.5rem;margin-bottom:1rem;}
+  .form-ok h3{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:.5rem;}
+  .form-ok p{font-size:.875rem;color:var(--t2);}
+
+  /* ── FEATURES PAGE ── */
+  .fp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+  .fp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2rem;transition:all var(--T);}
+  .fp-card:hover{border-color:rgba(62,168,224,.3);background:var(--card-h);transform:translateY(-3px);}
+  .fp-card-wide{grid-column:span 2;}
+  .fp-ico{width:44px;height:44px;border-radius:10px;background:var(--steel-dim);border:1px solid var(--steel-b);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.25rem;}
+  .fp-ico{width:40px;height:40px;border-radius:10px;background:var(--steel-dim);border:1px solid var(--steel-b);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:1.1rem;}
+  .fp-card h3{font-size:1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .fp-card p{font-size:.85rem;color:var(--t2);line-height:1.65;margin-bottom:1rem;}
+  .fp-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+  .fp-list li{font-size:.8rem;color:rgba(255,255,255,.6);display:flex;align-items:flex-start;gap:8px;line-height:1.45;}
+  .fp-list li::before{content:'→';color:var(--steel);flex-shrink:0;margin-top:1px;}
+  @media(max-width:640px){
+    .fp-grid{grid-template-columns:1fr;gap:1rem;}
+    .fp-card-wide{grid-column:span 1;}
+    .fp-card{padding:1.5rem;}
+    .fp-ico{width:36px;height:36px;font-size:1rem;margin-bottom:.9rem;}
+    .fp-card h3{font-size:.95rem;}
+    .fp-list li{font-size:.78rem;}
+  }
+  @media(min-width:641px) and (max-width:860px){
+    .fp-grid{grid-template-columns:1fr 1fr;}
+    .fp-card-wide{grid-column:span 2;}
+    .fp-card{padding:1.75rem;}
+  }
+
+  /* ── CONN VISUAL ── */
+  .conn-node{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.82rem;transition:all var(--T);}
+  .conn-node:hover{border-color:rgba(74,144,184,.3);}
+  .cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .cdot.s{background:var(--steel);}.cdot.k{background:var(--khaki);}.cdot.w{background:rgba(255,255,255,.4);}
+  .conn-arrow{text-align:center;color:var(--t3);font-size:.75rem;padding:.1rem 0;}
+  .conn-center{background:linear-gradient(135deg,var(--steel-dim),rgba(74,144,184,.04));border:1px solid var(--steel-b);border-radius:10px;padding:1rem;text-align:center;margin:.25rem 0;}
+  .cc-lbl{font-size:.62rem;color:var(--steel);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;}
+  .cc-title{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:-.02em;}
+
+  /* ── FOOTER ── */
+  footer{background:rgba(5,10,18,0.92);border-top:1px solid var(--border);padding:4rem 0 2rem;backdrop-filter:blur(10px);}
+  .ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+  @media(max-width:760px){.ft{grid-template-columns:1fr 1fr;gap:2rem;}.fbc{grid-column:1/-1;}}
+  .ftag{font-size:.85rem;color:var(--t3);line-height:1.7;max-width:280px;margin:1rem 0 1.25rem;}
+  .sa-b{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;color:var(--t3);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:.3rem .7rem;border-radius:100px;}
+  .fct{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:1rem;}
+  .fcl{list-style:none;display:flex;flex-direction:column;gap:.6rem;}
+  .fcl a{color:rgba(255,255,255,.38);text-decoration:none;font-size:.875rem;transition:color var(--T);cursor:pointer;}
+  .fcl a:hover{color:var(--white);}
+
+  /* khaki accent stripe */
+  .khaki-stripe{height:3px;background:linear-gradient(90deg,var(--navy-light) 0%,var(--steel) 35%,var(--khaki) 55%,var(--steel) 75%,var(--navy-light) 100%);}
+
+  .fb{padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:var(--t3);}
+
+  /* ── VALUE GRAPH ── */
+  .vg-tab{background:transparent;border:none;color:var(--t3);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;padding:.42rem .85rem;border-radius:7px;cursor:pointer;transition:all var(--T);white-space:nowrap;}
+  .vg-tab:hover{color:var(--white);}
+  .vg-tab.on{background:var(--steel);color:var(--navy);font-weight:700;}
+  .vg-kpi{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;}
+  .vg-kpi-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;line-height:1;}
+  .vg-kpi-lbl{font-size:.72rem;color:var(--t3);margin-top:.4rem;line-height:1.45;}
+  @media(max-width:860px){
+    #vgKpis{grid-template-columns:1fr 1fr!important;}
+  }
+  @media(max-width:640px){
+    #valueGraph{padding:4rem 0!important;}
+    .vg-kpi-val{font-size:1.3rem;}
+    #vgKpis{grid-template-columns:1fr 1fr!important;gap:.75rem!important;}
+    #valueGraph .vg-tab{font-size:.72rem;padding:.38rem .65rem;}
+  }
+
+  /* ── REVEAL ── */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ══════════════════════════════════════
+     MOBILE OVERHAUL
+  ══════════════════════════════════════ */
+
+  /* Base mobile — under 640px */
+  @media(max-width:640px){
+
+    /* Global */
+    body{font-size:15px;}
+    section{padding:4rem 0;}
+    .C{padding:0 1.25rem;}
+
+    /* Nav */
+    nav{padding:0 1.25rem;height:58px;}
+    .lm{width:26px;height:26px;font-size:.7rem;}
+    .nav-logo{font-size:1rem;}
+
+    /* Mobile menu */
+    .mob-menu{top:58px;padding:1.25rem 1.25rem;gap:.85rem;}
+    .mob-menu a{font-size:1rem;padding:.35rem 0;border-bottom:1px solid var(--border);}
+    .mob-menu a:last-child{border-bottom:none;margin-top:.25rem;}
+
+    /* Hero */
+    .hero{padding:5.5rem 0 3.5rem;min-height:auto;}
+    .hero h1{font-size:2.05rem;letter-spacing:-.04em;line-height:1.12;margin-bottom:1.25rem;}
+    .hero-sub{font-size:.95rem;margin-bottom:2rem;line-height:1.7;}
+    .eyebrow{font-size:.72rem;padding:.3rem .75rem;margin-bottom:1.25rem;}
+
+    /* Hero CTAs — stack on mobile */
+    .hero-ctas{flex-direction:column;gap:.75rem;align-items:stretch;}
+    .hero-ctas .btn-p,.hero-ctas .btn-g{width:100%;justify-content:center;padding:.9rem 1rem;font-size:.925rem;}
+
+    /* Hero stats — tighter, 3 across still but smaller */
+    .hero-stats{gap:1.25rem;padding-top:1.5rem;flex-wrap:wrap;}
+    .hs-val{font-size:1.3rem;}
+    .hs-lbl{font-size:.68rem;}
+
+    /* Section headings */
+    .stitle{font-size:1.65rem;letter-spacing:-.03em;}
+    .ssub{font-size:.9rem;line-height:1.7;}
+    .tag{font-size:.68rem;padding:.28rem .75rem;margin-bottom:1rem;}
+
+    /* Problem strip */
+    .prob-grid{grid-template-columns:1fr;gap:0;}
+    .prob-card{padding:1.5rem 1.25rem;}
+    .prob-card h4{font-size:.9rem;}
+    .prob-card p{font-size:.82rem;}
+
+    /* Logos */
+    .logos-row{gap:1.5rem;}
+    .logo-n{font-size:.78rem;}
+
+    /* Bento grid — all full width */
+    .bento{grid-template-columns:1fr;gap:.75rem;}
+    .bc8,.bc4,.bc6{grid-column:span 1;}
+    .bc{padding:1.5rem;}
+    .big-num{font-size:2.2rem;}
+
+    /* KPI tabs — scrollable row */
+    .kpi-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:.5rem;-webkit-overflow-scrolling:touch;gap:.4rem;}
+    .kpi-tabs::-webkit-scrollbar{display:none;}
+    .ktab{white-space:nowrap;flex-shrink:0;font-size:.8rem;padding:.5rem .9rem;}
+    .kpi-panel.on{grid-template-columns:1fr;}
+
+    /* How it works flow */
+    .flow-wrap{grid-template-columns:1fr;gap:2rem;}
+    .flow-step{padding:1.25rem 0;gap:1rem;}
+    .fs-num{width:28px;height:28px;font-size:.7rem;flex-shrink:0;}
+    .fs-title{font-size:.9rem;}
+    .flow-vis{padding:1.5rem;min-height:auto;}
+    .fv-kpis{grid-template-columns:1fr 1fr;}
+    .fv-title{font-size:1rem;}
+
+    /* Who section */
+    .who-grid{grid-template-columns:1fr;gap:1rem;}
+    .who-card{padding:1.5rem;}
+
+    /* Steps */
+    .steps-grid{grid-template-columns:1fr;gap:0;}
+    .step-card{padding:1.75rem 1.25rem;}
+
+    /* Testimonials */
+    .testi-grid{grid-template-columns:1fr;}
+    .tc{padding:1.5rem;}
+    .tc-text{font-size:.875rem;}
+
+    /* Pricing */
+    .pg{grid-template-columns:1fr;gap:1.25rem;padding:0 0;}
+    .pcard{padding:2rem 1.5rem;}
+    .pa{font-size:2.6rem;}
+
+    /* FAQ */
+    .faq-list{border-radius:var(--rl);}
+    .fq{font-size:.875rem;padding:1.1rem 1.25rem;}
+    .fa{padding:0 1.25rem;}
+    .fi.open .fa{padding:0 1.25rem 1rem;}
+    .fa p{font-size:.85rem;}
+
+    /* CTA band */
+    .cta-band{padding:3.5rem 0;}
+    .cta-band h2{font-size:1.5rem;letter-spacing:-.03em;}
+    .cta-band p{font-size:.875rem;padding:0 .25rem;}
+    .cta-acts{flex-direction:column;align-items:center;gap:.75rem;}
+    .cta-acts .btn-p,.cta-acts .btn-g,.cta-acts .btn-k{width:100%;max-width:320px;justify-content:center;}
+
+    /* Inner hero pages */
+    .ih{padding:6.5rem 0 2.5rem;}
+    .ih h1{font-size:1.65rem;letter-spacing:-.04em;}
+    .ih p{font-size:.875rem;padding:0 .5rem;}
+
+    /* Features page */
+    .fp-grid{grid-template-columns:1fr;}
+    .fp-card-wide{grid-column:span 1;}
+    .fp-card{padding:1.5rem;}
+
+    /* Contact */
+    .cw{grid-template-columns:1fr;gap:2rem;}
+    .cl h2{font-size:1.4rem;}
+    .cform{padding:1.5rem;}
+    .fr{grid-template-columns:1fr;}
+
+    /* Footer */
+    .ft{grid-template-columns:1fr 1fr;gap:1.5rem;}
+    .fbc{grid-column:1/-1;}
+    footer{padding:3rem 0 1.5rem;}
+    .fb{flex-direction:column;text-align:center;gap:.5rem;}
+  }
+
+  /* Tablet — 641px to 860px */
+  @media(min-width:641px) and (max-width:860px){
+    section{padding:5rem 0;}
+    .hero{padding:6.5rem 0 4rem;min-height:auto;}
+    .hero h1{font-size:2.6rem;}
+    .hero-ctas{gap:.75rem;}
+    .hero-stats{gap:2rem;}
+    .stitle{font-size:2rem;}
+    .bento{grid-template-columns:1fr 1fr;}
+    .bc8{grid-column:span 2;}
+    .bc4,.bc6{grid-column:span 1;}
+    .pg{grid-template-columns:1fr 1fr;}
+    .cta-acts{gap:.75rem;}
+    .kpi-panel.on{grid-template-columns:1fr 1fr;}
+    .prob-grid{grid-template-columns:1fr 1fr;}
+    .testi-grid{grid-template-columns:1fr 1fr;}
+    .flow-vis{min-height:260px;}
+  }
+
+  /* Ensure buttons never overflow on any small screen */
+  @media(max-width:400px){
+    .hero h1{font-size:1.85rem;}
+    .btn-p,.btn-g,.btn-k{font-size:.875rem;}
+    .pcard{padding:1.75rem 1.25rem;}
+    .pa{font-size:2.4rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="khaki-stripe"></div>
+<nav id="nav">
+  <span class="nav-logo" onclick="go('home')"><div class="lm">1F</div>1FinForce</span>
+  <div class="nav-c">
+    <a onclick="go('features')">Features</a>
+    <a onclick="go('how')">How it works</a>
+    <a onclick="go('pricing')">Pricing</a>
+    <a onclick="go('contact')">Contact</a>
+  </div>
+  <div class="nav-r">
+    <a href="https://app.1finforce.com/sign_in" class="nav-login">Sign in</a>
+    <a href="https://app.1finforce.com/signup" class="btn-nav">Start free →</a>
+  </div>
+  <div class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a onclick="go('features');toggleMob()">Features</a>
+  <a onclick="go('how');toggleMob()">How it works</a>
+  <a onclick="go('pricing');toggleMob()">Pricing</a>
+  <a onclick="go('contact');toggleMob()">Contact</a>
+  <a href="https://app.1finforce.com/sign_in">Sign in</a>
+  <a href="https://app.1finforce.com/signup" style="color:var(--steel);font-weight:700;">Get started →</a>
+</div>
+
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="page-home" class="page active">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-pattern"></div>
+    <div class="C">
+      <div class="hero-in">
+        <div>
+          <div class="eyebrow"><div class="dot-pulse"></div>One platform. Total business visibility.</div>
+          <h1>Stop running your<br>business on <em>guesswork.</em></h1>
+          <p class="hero-sub">1FinForce connects your inventory, cash flow, logistics, and orders into one real-time view — replacing spreadsheets and disconnected tools with a single source of truth.</p>
+          <div class="hero-ctas">
+            <a href="https://app.1finforce.com/signup" class="btn-p">Start for free →</a>
+            <a onclick="go('contact')" class="btn-g" style="cursor:pointer;">Book a demo</a>
+          </div>
+
+        </div>
+
+        <div class="hv" style="position:relative;">
+          <div class="dash">
+            <div class="dash-bar">
+              <div class="dd r"></div><div class="dd y"></div><div class="dd g"></div>
+              <div class="dash-url">app.1finforce.com/dashboard</div>
+            </div>
+            <div class="dash-body">
+              <div class="dash-layout">
+                <div class="ds">
+                  <div class="ds-sec">Overview</div>
+                  <div class="ds-item on">📊 Dashboard</div>
+                  <div class="ds-sec">Modules</div>
+                  <div class="ds-item">📦 Inventory</div>
+                  <div class="ds-item">💰 Finance</div>
+                  <div class="ds-item">🚚 Logistics</div>
+                  <div class="ds-item">🛒 Orders</div>
+                </div>
+                <div>
+                  <div class="kpi-row">
+                    <div class="kpi"><div class="kpi-lbl">Revenue MTD</div><div class="kpi-val kv-s">R84.2k</div><div class="kpi-chg">↑ 12.4%</div></div>
+                    <div class="kpi"><div class="kpi-lbl">Stock on hand</div><div class="kpi-val kv-k">1,037</div><div class="kpi-chg">R142k value</div></div>
+                    <div class="kpi"><div class="kpi-lbl">Open orders</div><div class="kpi-val kv-k">24</div><div class="kpi-chg warn">6 overdue</div></div>
+                  </div>
+                  <div class="dash-chart">
+                    <div class="dc-lbl">Cash flow vs inventory cost — 12 months</div>
+                    <div class="bars" id="heroBars"></div>
+                  </div>
+                  <table class="dtable">
+                    <thead><tr><th>Product</th><th>Stock</th><th>Orders</th><th>Status</th></tr></thead>
+                    <tbody>
+                      <tr><td>Product A</td><td>142</td><td>12 pending</td><td><span class="badge ok">Healthy</span></td></tr>
+                      <tr><td>Product B</td><td>18</td><td>8 pending</td><td><span class="badge low">Low Stock</span></td></tr>
+                      <tr><td>Product C</td><td>67</td><td>3 pending</td><td><span class="badge transit">In Transit</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fpill a"><div class="fp-lbl">Stock accuracy</div><div class="fp-val" style="color:var(--steel);">Real-time ✓</div><div class="fp-sub">Auto-updated on every sale</div></div>
+          <div class="fpill b"><div class="fp-lbl">Cash tied in inventory</div><div class="fp-val">R142,800</div><div class="fp-sub" style="color:var(--khaki);">↓ R18k from last month</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI IMPACT STRIP -->
+  <div class="kpi-strip">
+    <div class="C">
+      <div class="kpi-strip-grid">
+        <div class="ksi">
+          <div class="ksi-val" style="color:var(--steel);">28 → 1</div>
+          <div class="ksi-lbl">Days to know your cash position</div>
+          <div class="ksi-sub">SA distributors wait until month-end. 1FinForce shows you today.</div>
+        </div>
+        <div class="ksi ksi-mid">
+          <div class="ksi-val" style="color:var(--khaki);">95%</div>
+          <div class="ksi-lbl">Stock accuracy within 90 days</div>
+          <div class="ksi-sub">Replace manual counts and WhatsApp orders with a live inventory system.</div>
+        </div>
+        <div class="ksi">
+          <div class="ksi-val" style="color:var(--steel);">−22%</div>
+          <div class="ksi-lbl">Fewer lost sales from stockouts</div>
+          <div class="ksi-sub">Know what's running low before your customer finds out you're out.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL PROOF STRIP -->
+  <div class="spstrip">
+    <div class="C">
+      <div class="spstrip-inner">
+
+        <!-- Left: headline -->
+        <div class="spstrip-left">
+          <div class="spstrip-tag">🇿🇦 Built for South Africa</div>
+          <div class="spstrip-title">For businesses drowning<br>in spreadsheets.</div>
+          <div class="spstrip-sub">Distributors, wholesalers, and product companies across South Africa use 1FinForce to finally see their business clearly.</div>
+        </div>
+
+        <!-- Right: pain cards -->
+        <div class="spstrip-cards">
+          <div class="spcard">
+            <div class="spcard-icon">📋</div>
+            <div class="spcard-text">"I have 4 spreadsheets just to track one shipment"</div>
+            <div class="spcard-role">— Wholesale distributor, Johannesburg</div>
+          </div>
+          <div class="spcard">
+            <div class="spcard-icon">💸</div>
+            <div class="spcard-text">"I only find out my cash position at month end"</div>
+            <div class="spcard-role">— Product importer, Cape Town</div>
+          </div>
+          <div class="spcard spcard-solved">
+            <div class="spcard-icon">✓</div>
+            <div class="spcard-text" style="color:var(--white);">Now solved with 1FinForce</div>
+            <div class="spcard-role" style="color:var(--steel);">Real-time. One platform.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Industry pills -->
+      <div class="spstrip-pills">
+        <span class="sppill">📦 Wholesalers</span>
+        <span class="sppill">🚚 Distributors</span>
+        <span class="sppill">🛒 Retailers</span>
+        <span class="sppill">🏥 Health Practices</span>
+        <span class="sppill">📥 Importers</span>
+        <span class="sppill">🏭 Trading Businesses</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALUE GRAPH SECTION -->
+  <section class="reveal" id="valueGraph" style="padding:6rem 0;background:rgba(255,255,255,0.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+    <div class="C">
+
+      <!-- Header -->
+      <div style="margin-bottom:3rem;">
+        <div class="tag">Business impact</div>
+        <h2 class="stitle" style="margin-bottom:.75rem;">See what clarity does to your <em style="color:var(--steel);font-style:normal;">numbers.</em></h2>
+        <p class="ssub">Businesses that replace spreadsheets with 1FinForce get a live view of inventory, cash flow, and orders — all connected. Fewer stockouts, less cash tied up, faster decisions.</p>
+      </div>
+
+      <!-- Full-width chart card -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2rem;">
+
+        <!-- Top bar: title + legend + tabs -->
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem;">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-.02em;" id="vgChartTitle">Monthly Revenue — Before vs After 1FinForce</div>
+            <div style="font-size:.72rem;color:var(--t3);margin-top:.25rem;">12-month illustrative view</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+            <div style="display:flex;gap:1.25rem;">
+              <div style="display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--t2);">
+                <svg width="22" height="8" viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="4 3"/></svg>Before
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--steel);">
+                <svg width="22" height="8" viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="#4A90B8" stroke-width="2.5"/></svg>After
+              </div>
+            </div>
+            <div style="display:flex;gap:.3rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:3px;">
+              <button class="vg-tab on" id="vt-revenue" onclick="switchGraph('revenue',this)">Revenue</button>
+              <button class="vg-tab" id="vt-stock" onclick="switchGraph('stock',this)">Stock</button>
+              <button class="vg-tab" id="vt-cash" onclick="switchGraph('cash',this)">Cash flow</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas wrapper — explicit height -->
+        <div style="position:relative;width:100%;height:260px;">
+          <canvas id="vgCanvas"></canvas>
+        </div>
+
+        <!-- Footer note -->
+        <div style="display:flex;align-items:center;gap:8px;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--steel);flex-shrink:0;"></div>
+          <span id="vgNote" style="font-size:.72rem;color:var(--t3);">Dashed = spreadsheet-managed &nbsp;·&nbsp; Solid = after activating 1FinForce at month 6 &nbsp;·&nbsp; Illustrative example based on typical SMB outcomes</span>
+        </div>
+      </div>
+
+      <!-- KPI strip — 4 cards below chart -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.25rem;" id="vgKpis">
+        <div class="vg-kpi"><div class="vg-kpi-val" style="color:var(--steel);">+34%</div><div class="vg-kpi-lbl">Revenue growth after 6 months</div></div>
+        <div class="vg-kpi"><div class="vg-kpi-val" style="color:var(--khaki);">−28%</div><div class="vg-kpi-lbl">Reduction in stockouts</div></div>
+        <div class="vg-kpi"><div class="vg-kpi-val" style="color:var(--steel);">R42k</div><div class="vg-kpi-lbl">Average cash freed from dead stock</div></div>
+        <div class="vg-kpi"><div class="vg-kpi-val" style="color:var(--khaki);">8 hrs</div><div class="vg-kpi-lbl">Saved weekly on manual reconciliation</div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <div class="prob-strip">
+    <div class="C">
+      <div style="text-align:center;margin-bottom:2.5rem;">
+        <div class="tag" style="margin:0 auto 1rem;">The problem we solve</div>
+        <h2 class="stitle">Sound familiar?</h2>
+      </div>
+      <div class="prob-grid">
+        <div class="prob-card"><div class="prob-icon">📋</div><h4>Inaccurate stock levels</h4><p>You're never sure what's actually in the warehouse until someone physically checks — by then orders have already failed.</p></div>
+        <div class="prob-card"><div class="prob-icon">💸</div><h4>Cash flow uncertainty</h4><p>You don't know your real financial position until month-end reconciliation. By then, it's already too late to act.</p></div>
+        <div class="prob-card"><div class="prob-icon">🔗</div><h4>Disconnected teams</h4><p>Inventory says one thing, finance says another. Orders fall through the cracks between tools that were never designed to connect.</p></div>
+        <div class="prob-card"><div class="prob-icon">🔢</div><h4>Mismatched numbers</h4><p>Hours wasted every week reconciling spreadsheets that should never have been separate in the first place.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT WE DO -->
+  <section class="reveal">
+    <div class="C">
+      <div style="margin-bottom:3.5rem;">
+        <div class="tag">What 1FinForce does</div>
+        <h2 class="stitle" style="margin-bottom:1rem;">One connected system.<br>Every number in sync.</h2>
+        <p class="ssub">Product orders and sales automatically update inventory. Inventory changes flow into your financial view. Shipments track alongside inventory and order movements. Everything feeds into one dashboard.</p>
+      </div>
+      <div class="bento">
+        <div class="bc bc8">
+          <div class="bico">📦</div>
+          <h3>Inventory — always accurate</h3>
+          <p>Real-time stock levels that update automatically with every sale and purchase order. Know your stock turnover, spot dead inventory, and never oversell again.</p>
+          <div class="chips">
+            <span class="chip">Real-time stock levels</span>
+            <span class="chip">Stock movement</span>
+            <span class="chip">Turnover rate</span>
+            <span class="chip">Dead stock alerts</span>
+            <span class="chip">Stock accuracy</span>
+          </div>
+        </div>
+        <div class="bc bc4" style="display:flex;flex-direction:column;justify-content:space-between;">
+          <div class="bico">🔗</div>
+          <div>
+            <div class="big-num">6</div>
+            <div style="font-size:.85rem;color:var(--t2);margin-top:.5rem;">modules. One connected platform. All data in sync — automatically.</div>
+          </div>
+        </div>
+        <div class="bc bc4">
+          <div class="bico">💰</div>
+          <h3>Finance — linked to reality</h3>
+          <p>Your financial position tied directly to inventory and sales. Know the value of stock on hand, cash tied up in inventory, and revenue in real time.</p>
+          <div class="chips" style="margin-top:.75rem;">
+            <span class="chip k">Cash flow</span>
+            <span class="chip k">Stock value</span>
+            <span class="chip k">Revenue</span>
+          </div>
+        </div>
+        <div class="bc bc4">
+          <div class="bico">🚚</div>
+          <h3>Logistics — tracked end-to-end</h3>
+          <p>Shipment status from pending to delivered. Fulfillment tracking and delivery timelines — all connected to your inventory movements.</p>
+          <div class="chips" style="margin-top:.75rem;">
+            <span class="chip">Shipment status</span>
+            <span class="chip">Fulfillment</span>
+            <span class="chip">Timelines</span>
+          </div>
+        </div>
+        <div class="bc bc4">
+          <div class="bico">🛒</div>
+          <h3>Orders & sales — auto-synced</h3>
+          <p>Product orders and sales automatically adjust inventory levels. Track best-sellers, fulfillment status, and revenue per product without manual updates.</p>
+          <div class="chips" style="margin-top:.75rem;">
+            <span class="chip">Order volume</span>
+            <span class="chip">Sales trends</span>
+            <span class="chip">Best sellers</span>
+          </div>
+        </div>
+        <div class="bc bc4">
+          <div class="bico">🤝</div>
+          <h3>Customer management</h3>
+          <p>Every customer, their order history, and outstanding balances — in one place. Know who you're selling to and how much they owe.</p>
+          <div class="chips" style="margin-top:.75rem;">
+            <span class="chip">Order history</span>
+            <span class="chip k">Balances</span>
+            <span class="chip">Profiles</span>
+          </div>
+        </div>
+        <div class="bc bc4">
+          <div class="bico" style="background:var(--khaki-dim);border-color:var(--khaki-b);">🏭</div>
+          <h3>Supplier management</h3>
+          <p>Track every supplier, what you pay them, and how reliably they deliver — linked directly to your inventory reorder thresholds.</p>
+          <div class="chips" style="margin-top:.75rem;">
+            <span class="chip k">Purchase history</span>
+            <span class="chip k">Lead times</span>
+            <span class="chip">Performance</span>
+          </div>
+        </div>
+        <div class="bc bc6" style="background:linear-gradient(135deg,var(--steel-dim),rgba(62,168,224,.02));border-color:var(--steel-b);">
+          <div class="bico">📊</div>
+          <h3>One dashboard. One source of truth.</h3>
+          <p>All data feeds into a single central dashboard. Inventory vs finance vs logistics — all aligned. No mismatched numbers, no reconciliation work, no more guessing.</p>
+        </div>
+        <div class="bc bc6" style="background:linear-gradient(135deg,var(--khaki-dim),rgba(184,164,118,.02));border-color:var(--khaki-b);">
+          <div class="bico" style="background:var(--khaki-dim);border-color:var(--khaki-b);">🇿🇦</div>
+          <h3>Simpler than ERP. Smarter than spreadsheets.</h3>
+          <p>Built specifically for South African SMBs. Each team has their own workspace — inventory, finance, logistics — but all data stays synced. Priced in rand. Supported locally.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI TABS -->
+  <section class="kpi-section reveal">
+    <div class="C">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <div class="tag" style="margin:0 auto 1rem;">Business KPIs</div>
+        <h2 class="stitle" style="margin-bottom:1rem;">The numbers that actually matter.</h2>
+        <p class="ssub" style="margin:0 auto;">Live visibility into every KPI that drives your business — across inventory, sales, finance, logistics, and operations.</p>
+      </div>
+      <div class="kpi-tabs">
+        <button class="ktab on" onclick="kpiTab('inv',this)">📦 Inventory</button>
+        <button class="ktab" onclick="kpiTab('sales',this)">🛒 Sales & Orders</button>
+        <button class="ktab" onclick="kpiTab('fin',this)">💰 Financial</button>
+        <button class="ktab" onclick="kpiTab('log',this)">🚚 Logistics</button>
+        <button class="ktab" onclick="kpiTab('ops',this)">⚙️ Operational</button>
+      </div>
+      <div id="kpi-inv" class="kpi-panel on">
+        <div class="kcard"><div class="kcard-icon">📈</div><h4>Real-time stock levels</h4><p>Always-accurate stock quantities updated automatically with every sale, purchase order, and adjustment.</p></div>
+        <div class="kcard"><div class="kcard-icon">🔄</div><h4>Stock movement tracking</h4><p>Full visibility of inbound and outbound stock movements across your business in real time.</p></div>
+        <div class="kcard"><div class="kcard-icon">⚡</div><h4>Stock turnover rate</h4><p>Know how quickly inventory converts to sales so you can make smarter buying decisions.</p></div>
+        <div class="kcard"><div class="kcard-icon">🔍</div><h4>Dead & slow-moving stock</h4><p>Identify products that aren't moving before they tie up cash and warehouse space too long.</p></div>
+        <div class="kcard"><div class="kcard-icon">✅</div><h4>Stock accuracy</h4><p>Eliminate the gap between what your system says and what's actually on the shelf.</p></div>
+      </div>
+      <div id="kpi-sales" class="kpi-panel">
+        <div class="kcard"><div class="kcard-icon">💳</div><h4>Total sales over time</h4><p>Track revenue trends across any time period to spot growth, seasonality, and decline early.</p></div>
+        <div class="kcard"><div class="kcard-icon">📦</div><h4>Order volume and trends</h4><p>See how many orders are coming in, at what rate, and whether fulfillment is keeping up.</p></div>
+        <div class="kcard"><div class="kcard-icon">💰</div><h4>Revenue per product</h4><p>Know exactly which products are driving your revenue and which are just taking up shelf space.</p></div>
+        <div class="kcard"><div class="kcard-icon">🏆</div><h4>Best vs slow sellers</h4><p>Identify top performers and underperformers so you can stock smarter and sell faster.</p></div>
+        <div class="kcard"><div class="kcard-icon">🔖</div><h4>Order fulfillment status</h4><p>Track every order from placed to delivered so nothing falls through the cracks between teams.</p></div>
+      </div>
+      <div id="kpi-fin" class="kpi-panel">
+        <div class="kcard"><div class="kcard-icon">💸</div><h4>Cash flow linked to inventory</h4><p>Your cash position is directly connected to stock and sales data — no manual reconciliation.</p></div>
+        <div class="kcard"><div class="kcard-icon">🏷️</div><h4>Cost of inventory</h4><p>Understand what your stock is costing you at any point in time, not just at month-end.</p></div>
+        <div class="kcard"><div class="kcard-icon">📊</div><h4>Value of stock on hand</h4><p>Live valuation of your current inventory — how much capital is sitting in your warehouse right now.</p></div>
+        <div class="kcard"><div class="kcard-icon">🔒</div><h4>Cash tied up in inventory</h4><p>See exactly how much working capital is locked in stock so you can manage liquidity better.</p></div>
+        <div class="kcard"><div class="kcard-icon">📈</div><h4>Revenue tracking</h4><p>Real-time revenue data linked directly to sales and order activity — no end-of-month surprises.</p></div>
+      </div>
+      <div id="kpi-log" class="kpi-panel">
+        <div class="kcard"><div class="kcard-icon">📍</div><h4>Shipment status</h4><p>Track every shipment — pending, in transit, or delivered — in a single view alongside your inventory.</p></div>
+        <div class="kcard"><div class="kcard-icon">✅</div><h4>Order fulfillment tracking</h4><p>Know the fulfillment status of every order so your team and customers are never left guessing.</p></div>
+        <div class="kcard"><div class="kcard-icon">⏱️</div><h4>Delivery timelines</h4><p>Monitor expected and actual delivery dates so you can flag delays before they impact customers.</p></div>
+      </div>
+      <div id="kpi-ops" class="kpi-panel">
+        <div class="kcard"><div class="kcard-icon">🔗</div><h4>Team alignment</h4><p>Inventory, finance, and logistics teams work from the same data — no more conflicting numbers between departments.</p></div>
+        <div class="kcard"><div class="kcard-icon">📐</div><h4>Data consistency</h4><p>One system means one version of the truth. Eliminating manual syncing eliminates errors.</p></div>
+        <div class="kcard"><div class="kcard-icon">🔭</div><h4>Operational visibility</h4><p>The business owner sees the full picture in one dashboard — every KPI, every module, live and in sync.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO WE HELP -->
+  <section class="reveal">
+    <div class="C">
+      <div style="text-align:center;margin-bottom:3.5rem;">
+        <div class="tag" style="margin:0 auto 1rem;">Who we help</div>
+        <h2 class="stitle" style="margin-bottom:1rem;">Built for businesses<br>managing physical products.</h2>
+        <p class="ssub" style="margin:0 auto;">If you carry inventory and need to see how it connects to your money and your orders — 1FinForce is built for you.</p>
+      </div>
+      <div class="who-grid">
+        <div class="who-card"><div class="who-icon">🏪</div><h3>Retailers & wholesalers</h3><p>Manage stock across multiple product lines. See what's selling, what's sitting, and what your cash position looks like — all in one place.</p></div>
+        <div class="who-card"><div class="who-icon">📦</div><h3>Distributors & traders</h3><p>Track inbound and outbound shipments alongside inventory levels. Know your fulfillment status without chasing updates across systems.</p></div>
+        <div class="who-card"><div class="who-icon">📋</div><h3>Spreadsheet-dependent businesses</h3><p>You know spreadsheets aren't working — numbers don't match, updates take too long, reconciliation steals hours every week. 1FinForce replaces all of it.</p></div>
+        <div class="who-card"><div class="who-icon">🏢</div><h3>Teams using disconnected tools</h3><p>When inventory lives in one system, finance in another, and orders somewhere else — data breaks down. 1FinForce connects everything into one source of truth.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="reveal">
+    <div class="C">
+      <div style="text-align:center;margin-bottom:3.5rem;">
+        <div class="tag" style="margin:0 auto 1rem;">From our customers</div>
+        <h2 class="stitle">What SA businesses say.</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="tc"><div class="stars">★★★★★</div><p class="tc-text">"We were running inventory on three spreadsheets and finance on a fourth. Numbers never matched. 1FinForce gave us one view across everything — we saved hours every week on reconciliation alone."</p><div class="tc-auth"><div class="av">KD</div><div><div class="av-name">Khaya Dlamini</div><div class="av-role">Owner, Metro Wholesale Durban</div></div></div></div>
+        <div class="tc"><div class="stars">★★★★★</div><p class="tc-text">"I could never tell what my real cash position was because it was always tied to stock I hadn't counted yet. 1FinForce connects it all — I see exactly what cash is tied up in inventory versus what's free."</p><div class="tc-auth"><div class="av">NV</div><div><div class="av-name">Nadia van Wyk</div><div class="av-role">Owner, Cape Wholesale Supplies</div></div></div></div>
+        <div class="tc"><div class="stars">★★★★★</div><p class="tc-text">"Orders were getting missed because logistics didn't know what inventory had confirmed. Now everything is in one system and the team finally works off the same numbers. Huge difference operationally."</p><div class="tc-auth"><div class="av">TM</div><div><div class="av-name">Thabo Mahlangu</div><div class="av-role">Ops Manager, JHB Distributors</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="reveal">
+    <div class="C">
+      <div style="text-align:center;margin-bottom:3.5rem;"><div class="tag" style="margin:0 auto 1rem;">FAQ</div><h2 class="stitle">Common questions.</h2></div>
+      <div class="faq-list">
+        <div class="fi"><button class="fq" onclick="faq(this)">What exactly does 1FinForce replace?<span class="fchev">+</span></button><div class="fa"><p>1FinForce replaces the combination of spreadsheets, basic accounting tools, and manual tracking systems that most SMBs use to manage inventory, cash flow, orders, and logistics separately. Instead of four disconnected systems, you get one connected platform.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">How does the data stay connected across modules?<span class="fchev">+</span></button><div class="fa"><p>When a product sale is recorded, inventory levels update automatically. That inventory change then reflects in your financial view — updating the value of stock on hand and cash position. Shipments and logistics update alongside inventory and order movements. Everything is connected, not separate.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">Is it complicated to set up?<span class="fchev">+</span></button><div class="fa"><p>No. 1FinForce is designed for business owners, not IT teams. Load your products, set up your suppliers, and the platform handles the connections. Most businesses are up and running within a day.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">We're not very big — is this for us?<span class="fchev">+</span></button><div class="fa"><p>Yes. 1FinForce is specifically designed for small and medium-sized South African businesses. It gives you the visibility that large enterprises get from expensive ERP systems — at a fraction of the cost and complexity.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">What about data security and POPIA?<span class="fchev">+</span></button><div class="fa"><p>We operate in alignment with POPIA (South Africa's Protection of Personal Information Act). Your business data is encrypted, backed up regularly, and never shared with third parties.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band reveal">
+    <div class="C">
+      <h2>One platform. Every number connected.</h2>
+      <p>Stop reconciling spreadsheets. Start running your business on real-time data.</p>
+      <div class="cta-acts">
+        <a href="https://app.1finforce.com/signup" class="btn-p">Start for free →</a>
+        <a onclick="go('contact')" class="btn-g" style="cursor:pointer;">Book a demo</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /home -->
+
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<div id="page-how" class="page">
+  <div class="ih">
+    <div class="C">
+      <div class="tag" style="margin:0 auto 1rem;">How it works</div>
+      <h1>Everything connected.<br>Nothing manual.</h1>
+      <p style="margin-top:1rem;">Each module has its own workspace. But all data stays synced — automatically, in real time, without any manual reconciliation.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="C">
+      <div style="text-align:center;margin-bottom:4rem;">
+        <div class="tag" style="margin:0 auto 1rem;">The connected data flow</div>
+        <h2 class="stitle" style="margin-bottom:1rem;">One action. Four systems updated.</h2>
+        <p class="ssub" style="margin:0 auto;">When a sale happens, your inventory drops. Your cash flow updates. Your order moves to fulfilled. Your logistics marks the shipment complete. One event, automatically synced across the entire business.</p>
+      </div>
+
+      <div style="max-width:480px;margin:0 auto 5rem;display:flex;flex-direction:column;gap:.4rem;">
+        <div class="conn-node"><div class="cdot s"></div><strong>Product sale or purchase order recorded</strong></div>
+        <div class="conn-arrow">↓ automatically triggers</div>
+        <div class="conn-center"><div class="cc-lbl">1FinForce sync engine</div><div class="cc-title">All modules update in real time</div></div>
+        <div class="conn-arrow">↓ instantly reflected in</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+          <div class="conn-node"><div class="cdot s"></div>Inventory levels</div>
+          <div class="conn-node"><div class="cdot k"></div>Cash flow & finances</div>
+          <div class="conn-node"><div class="cdot w"></div>Order fulfillment</div>
+          <div class="conn-node"><div class="cdot s"></div>Logistics & shipments</div>
+        </div>
+        <div class="conn-arrow">↓ feeds into</div>
+        <div class="conn-node" style="justify-content:center;background:var(--steel-dim);border-color:var(--steel-b);"><div class="cdot s"></div><strong style="color:var(--steel);">Central dashboard — one source of truth</strong></div>
+      </div>
+
+      <div class="flow-wrap">
+        <div id="flowSteps">
+          <div class="flow-step on" onclick="flowClick(0,this)"><div class="fs-num">1</div><div><div class="fs-title">Load your inventory</div><div class="fs-desc">Add your products, set stock quantities, link your suppliers, and configure reorder thresholds. This becomes the foundation everything else connects to.</div></div></div>
+          <div class="flow-step" onclick="flowClick(1,this)"><div class="fs-num">2</div><div><div class="fs-title">Record sales and orders</div><div class="fs-desc">Log product sales and purchase orders. Inventory levels update automatically — no manual stock adjustments needed after every transaction.</div></div></div>
+          <div class="flow-step" onclick="flowClick(2,this)"><div class="fs-num">3</div><div><div class="fs-title">Track logistics and shipments</div><div class="fs-desc">Incoming and outgoing shipments tracked alongside your inventory and order data. See what's pending, in transit, and delivered in one view.</div></div></div>
+          <div class="flow-step" onclick="flowClick(3,this)"><div class="fs-num">4</div><div><div class="fs-title">Finances update automatically</div><div class="fs-desc">Cash flow, cost of inventory, value of stock on hand — all update in real time as trades happen. No month-end catch-up. No spreadsheet reconciliation.</div></div></div>
+          <div class="flow-step" onclick="flowClick(4,this)"><div class="fs-num">5</div><div><div class="fs-title">See everything in one dashboard</div><div class="fs-desc">The business owner gets a live central dashboard — inventory health, financial position, order status, logistics — all aligned. One source of truth for the whole business.</div></div></div>
+        </div>
+        <div class="flow-vis" id="flowVis">
+          <div class="fv-tag">Step 1 — Inventory</div>
+          <div class="fv-title">Your stock. Always accurate.</div>
+          <ul class="fv-list">
+            <li><span class="fv-ck">✓</span>Add products with quantities and costs</li>
+            <li><span class="fv-ck">✓</span>Link suppliers and set reorder points</li>
+            <li><span class="fv-ck">✓</span>Inventory becomes the backbone of the whole system</li>
+          </ul>
+          <div class="fv-kpis">
+            <div class="fv-kpi"><div class="fv-kpi-lbl">Total products</div><div class="fv-kpi-val">248 items</div></div>
+            <div class="fv-kpi"><div class="fv-kpi-lbl">Stock value</div><div class="fv-kpi-val">R142,800</div></div>
+            <div class="fv-kpi"><div class="fv-kpi-lbl">Low stock alerts</div><div class="fv-kpi-val" style="color:var(--khaki);">3 items</div></div>
+            <div class="fv-kpi"><div class="fv-kpi-lbl">Suppliers linked</div><div class="fv-kpi-val">12 active</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="C">
+      <h2>See the connection live.</h2>
+      <p>Book a demo and we'll walk through how 1FinForce connects your specific business data in real time.</p>
+      <div class="cta-acts">
+        <a onclick="go('contact')" class="btn-p" style="cursor:pointer;">Book a free demo →</a>
+        <a href="https://app.1finforce.com/signup" class="btn-g">Get started</a>
+      </div>
+    </div>
+  </div>
+</div><!-- /how -->
+
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<div id="page-features" class="page">
+  <div class="ih">
+    <div class="C">
+      <div class="tag" style="margin:0 auto 1rem;">All features</div>
+      <h1>Six modules.<br>One connected platform.</h1>
+      <p style="margin-top:1rem;">Each module has its own workspace for the relevant team. All data flows between them automatically — no manual syncing, no mismatched numbers.</p>
+    </div>
+  </div>
+  <section style="padding:4rem 0;">
+    <div class="C">
+      <div class="fp-grid">
+        <div class="fp-card"><div class="fp-ico">📦</div><h3>Inventory Management</h3><p>Real-time stock tracking that updates automatically with every sale and purchase order.</p><ul class="fp-list"><li>Real-time stock levels (inbound/outbound)</li><li>Stock turnover rate tracking</li><li>Dead and slow-moving inventory alerts</li><li>Stock accuracy — system vs physical</li><li>Supplier management and reorder thresholds</li></ul></div>
+        <div class="fp-card"><div class="fp-ico">💰</div><h3>Finance & Cash Flow</h3><p>Financial visibility directly connected to your inventory and sales data — updated in real time.</p><ul class="fp-list"><li>Cash flow linked to inventory and sales</li><li>Cost of inventory tracking</li><li>Value of stock on hand (live)</li><li>Cash tied up in inventory</li><li>Revenue tracking by product and period</li></ul></div>
+        <div class="fp-card"><div class="fp-ico">🚚</div><h3>Logistics & Shipments</h3><p>Shipment tracking connected to inventory and order data — end to end, all in one view.</p><ul class="fp-list"><li>Shipment status: pending, in transit, delivered</li><li>Order fulfillment tracking</li><li>Delivery timelines and delay alerts</li><li>Linked to inventory movements</li><li>Supplier delivery performance</li></ul></div>
+        <div class="fp-card"><div class="fp-ico">🛒</div><h3>Product Orders & Sales</h3><p>Orders and sales automatically update inventory — no manual stock adjustments after every transaction.</p><ul class="fp-list"><li>Total sales tracking over time</li><li>Order volume and trend analysis</li><li>Revenue per product</li><li>Best-selling vs slow-selling identification</li><li>Order fulfillment status tracking</li></ul></div>
+        <div class="fp-card"><div class="fp-ico">🤝</div><h3>Customer Management</h3><p>Keep track of every customer your business sells to — their orders, history, and contact details all in one place.</p><ul class="fp-list"><li>Customer profiles and contact records</li><li>Full order history per customer</li><li>Outstanding balances and payment tracking</li><li>Sales performance by customer</li><li>Easy lookup when processing orders</li></ul></div>
+        <div class="fp-card"><div class="fp-ico">🏭</div><h3>Supplier Management</h3><p>Manage all your suppliers centrally — who you buy from, what you pay, and how reliably they deliver.</p><ul class="fp-list"><li>Supplier profiles and contact details</li><li>Purchase history per supplier</li><li>Pricing and lead time tracking</li><li>Supplier delivery performance</li><li>Linked to inventory reorder thresholds</li></ul></div>
+        <div class="fp-card fp-card-wide" style="background:linear-gradient(135deg,var(--steel-dim),var(--card));border-color:var(--steel-b);">
+          <div class="fp-ico">📊</div>
+          <h3>Central Dashboard — One Source of Truth</h3>
+          <p style="margin-bottom:1rem;">All four modules feed into one central dashboard for the business owner. Inventory vs finance vs logistics vs orders — all aligned, all live. Team alignment, data consistency, and full operational visibility in a single view.</p>
+          <div class="chips">
+            <span class="chip">Live KPIs across all modules</span>
+            <span class="chip">Team workspace alignment</span>
+            <span class="chip">Data consistency</span>
+            <span class="chip">No reconciliation needed</span>
+            <span class="chip">Real-time updates</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="cta-band">
+    <div class="C">
+      <h2>See all four modules working together.</h2>
+      <p>Book a free demo and we'll walk you through the full connected platform live.</p>
+      <div class="cta-acts">
+        <a onclick="go('contact')" class="btn-p" style="cursor:pointer;">Book a demo →</a>
+        <a href="https://app.1finforce.com/signup" class="btn-g">Get started</a>
+      </div>
+    </div>
+  </div>
+</div><!-- /features -->
+
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<div id="page-pricing" class="page">
+
+  <!-- INNER HERO -->
+  <div class="ih">
+    <div class="C">
+      <div class="tag" style="margin:0 auto 1rem;">Pricing</div>
+      <h1>Two plans.<br>One clear choice.</h1>
+      <p style="margin-top:1rem;font-size:.95rem;color:var(--t2);max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;">Simple, transparent pricing for South African businesses ready to stop running on spreadsheets.</p>
+    </div>
+  </div>
+
+  <!-- TRIAL BANNER -->
+  <div style="background:rgba(62,168,224,0.08);border-bottom:1px solid var(--steel-b);padding:.85rem 5%;text-align:center;">
+    <p style="font-size:.85rem;color:var(--steel);font-weight:600;">🎉 7-day free trial on both plans — no credit card required</p>
+  </div>
+
+  <!-- PRICING CARDS -->
+  <section style="padding:3.5rem 0 2rem;">
+    <div class="C">
+      <div class="pricing-cards">
+
+        <!-- STARTER -->
+        <div class="prc-card">
+          <div class="prc-name">Starter</div>
+          <div class="prc-price">
+            <span class="prc-currency">R</span>
+            <span class="prc-amount">600</span>
+            <span class="prc-period">/month</span>
+          </div>
+          <p class="prc-desc">For small businesses that want to get organised and start managing everything in one place.</p>
+          <ul class="prc-features">
+            <li><span class="pck">✓</span>Full platform access</li>
+            <li><span class="pck">✓</span>Up to 3 users</li>
+            <li><span class="pck">✓</span>Inventory, finance &amp; logistics</li>
+            <li><span class="pck">✓</span>Self-setup with guides</li>
+            <li><span class="pck">✓</span>Email support</li>
+          </ul>
+          <a href="https://app.1finforce.com/signup" class="prc-btn-ghost">Start free trial →</a>
+        </div>
+
+        <!-- PROFESSIONAL -->
+        <div class="prc-card prc-featured">
+          <div class="prc-badge">Most Popular</div>
+          <div class="prc-name" style="color:var(--steel);">Professional</div>
+          <div class="prc-price">
+            <span class="prc-currency">R</span>
+            <span class="prc-amount">2,000</span>
+            <span class="prc-period">/month</span>
+          </div>
+          <p class="prc-desc">For serious businesses that want everything — inventory, finance, logistics — running on one system, set up properly from day one.</p>
+          <ul class="prc-features">
+            <li><span class="pck">✓</span>Full platform access</li>
+            <li><span class="pck">✓</span>Unlimited users</li>
+            <li><span class="pck">✓</span>Guided onboarding — we set it up with you</li>
+            <li><span class="pck">✓</span>Workflow setup for your operation</li>
+            <li><span class="pck">✓</span>Priority support</li>
+          </ul>
+          <a onclick="go('contact')" class="prc-btn-primary" style="cursor:pointer;">Book a demo →</a>
+          <p style="text-align:center;font-size:.75rem;color:var(--t3);margin-top:.85rem;">We configure the platform for your business before you go live.</p>
+        </div>
+
+      </div>
+
+      <!-- Trust pills -->
+      <div class="trust-pills">
+        <div class="trust-pill"><span style="color:var(--steel);">✓</span> No lock-in contracts</div>
+        <div class="trust-pill"><span style="color:var(--steel);">✓</span> Cancel anytime</div>
+        <div class="trust-pill"><span style="color:var(--steel);">✓</span> Priced in rand</div>
+        <div class="trust-pill"><span style="color:var(--steel);">✓</span> SA support team</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="padding:4rem 0;background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+    <div class="C">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <div class="tag" style="margin:0 auto 1rem;">How it works</div>
+        <h2 class="stitle" style="margin-bottom:.75rem;">Up and running in three steps.</h2>
+        <p class="ssub" style="margin:0 auto;">We don't just give you software — we help you set it up so your business actually runs on it from day one.</p>
+      </div>
+      <div class="pricing-steps">
+        <div class="pstep">
+          <div class="pstep-num">1</div>
+          <h3 class="pstep-title">Book a demo</h3>
+          <p class="pstep-desc">We get on a call, learn how your business operates, and show you exactly how 1FinForce fits your workflow.</p>
+        </div>
+        <div class="pstep-arrow">→</div>
+        <div class="pstep">
+          <div class="pstep-num">2</div>
+          <h3 class="pstep-title">We set up your workflow</h3>
+          <p class="pstep-desc">We configure the platform around your specific operation — your products, team, and processes. No generic setup.</p>
+        </div>
+        <div class="pstep-arrow">→</div>
+        <div class="pstep">
+          <div class="pstep-num">3</div>
+          <h3 class="pstep-title">Your business runs on one system</h3>
+          <p class="pstep-desc">Inventory, cash flow, logistics, and orders — all connected. One dashboard. No more spreadsheets.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="padding:4rem 0;">
+    <div class="C">
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:-.03em;text-align:center;margin-bottom:2rem;">Pricing questions</h3>
+      <div class="faq-list">
+        <div class="fi"><button class="fq" onclick="faq(this)">What is included in the Professional workflow setup?<span class="fchev">+</span></button><div class="fa"><p>We get on a call with you, understand your specific operation — your products, suppliers, team, and how you currently work — and configure 1FinForce to match. Your inventory, financial tracking, logistics flow, and order process are set up correctly from day one.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">What is the difference between Starter and Professional?<span class="fchev">+</span></button><div class="fa"><p>Both plans give you full platform access. Professional supports unlimited users (vs 3 on Starter) and includes guided onboarding and workflow setup where we configure everything with you.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">Can I upgrade later?<span class="fchev">+</span></button><div class="fa"><p>Yes. Upgrade any time and we prorate the difference. No penalties, no lock-in.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">Is there a contract or lock-in?<span class="fchev">+</span></button><div class="fa"><p>No. Both plans are month-to-month. Cancel any time. We would rather earn your business every month.</p></div></div>
+        <div class="fi"><button class="fq" onclick="faq(this)">Do you offer annual billing?<span class="fchev">+</span></button><div class="fa"><p>Yes — annual billing saves you 2 months vs monthly. Reach out and we will set it up for your account.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band" style="border-top:1px solid var(--border);">
+    <div class="C">
+      <h2>Ready to run your business<br>on one system?</h2>
+      <p>Book a free demo and we will show you exactly how 1FinForce works for your operation before you commit to anything.</p>
+      <div class="cta-acts">
+        <a onclick="go('contact')" class="btn-p" style="cursor:pointer;">Book a demo →</a>
+        <a href="https://app.1finforce.com/signup" class="btn-g">Start free trial</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /pricing -->
+
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<div id="page-contact" class="page">
+
+  <div class="ih">
+    <div class="C">
+      <div class="tag" style="margin:0 auto 1rem;">Contact us</div>
+      <h1>Let's talk about<br>your business.</h1>
+      <p style="margin-top:1rem;">Book a free 30-minute demo or send us a message. We'll get back to you within 1 business day.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="C">
+      <div class="cw">
+
+        <!-- LEFT — Info + Calendly -->
+        <div class="cl">
+          <h2>Book a free demo.</h2>
+          <p>We get on a call, learn how your business operates, and show you exactly how 1FinForce fits your workflow — configured live for your specific operation.</p>
+
+          <div class="cd" style="margin-top:1.5rem;">
+            <div class="cdico">📧</div>
+            <div><div class="cd-lbl">Email</div><div class="cd-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6112000d0412215007080f070e1302044f020e0c">[email&#160;protected]</a></div></div>
+          </div>
+          <div class="cd">
+            <div class="cdico">📍</div>
+            <div><div class="cd-lbl">Based in</div><div class="cd-val">Johannesburg, South Africa</div></div>
+          </div>
+
+          <div class="cn" style="margin-top:1.5rem;">
+            <div class="cn-tag">Pick a time below</div>
+            <p>30 minutes. No pressure. We'll show you the platform configured for your business before you commit to anything.</p>
+          </div>
+
+          <div style="margin-top:1.5rem;">
+            <div class="calendly-inline-widget" data-url="https://calendly.com/1finforce-sales/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=4a90b8" style="min-width:280px;height:660px;border-radius:12px;overflow:hidden;"></div>
+            <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          </div>
+        </div>
+
+        <!-- RIGHT — Contact Form -->
+        <div class="cform" id="cformWrap">
+          <h3>Or send us a message</h3>
+          <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
+            <input type="hidden" name="form-name" value="contact">
+            <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
+            <div class="fr">
+              <div class="fg"><label>First name</label><input type="text" name="first-name" placeholder="Thandi" required></div>
+              <div class="fg"><label>Last name</label><input type="text" name="last-name" placeholder="Mokoena"></div>
+            </div>
+            <div class="fg"><label>Email address</label><input type="email" name="email" placeholder="thandi@mybusiness.co.za" required></div>
+            <div class="fg">
+              <label>Business type</label>
+              <select name="business-type">
+                <option value="">Select your industry...</option>
+                <option>Wholesale / Distribution</option>
+                <option>Retail</option>
+                <option>Manufacturing / Trading</option>
+                <option>Health Practice</option>
+                <option>Construction / Contracting</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Current tools you use</label>
+              <select name="current-tools">
+                <option value="">Select...</option>
+                <option>Spreadsheets only</option>
+                <option>Spreadsheets + accounting software</option>
+                <option>Multiple disconnected tools</option>
+                <option>Basic ERP / inventory system</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell us about your business — what you manage, how many products, your main pain points..."></textarea></div>
+            <button type="submit" class="fsub">Send message →</button>
+          </form>
+          <div class="form-ok" id="formOk" style="display:none;">
+            <div class="form-ok-icon">✅</div>
+            <h3>Message sent!</h3>
+            <p>Thanks for reaching out. We'll get back to you within 1 business day.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- /contact -->
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="khaki-stripe" style="margin-bottom:0;"></div>
+  <div class="C" style="padding-top:3rem;">
+    <div class="ft">
+      <div class="fbc">
+        <span class="nav-logo" onclick="go('home')" style="display:inline-flex;"><div class="lm">1F</div>1FinForce</span>
+        <p class="ftag">Inventory, cash flow, logistics, and orders — connected in one real-time platform for South African SMBs.</p>
+        <div class="sa-b">🇿🇦 Proudly South African</div>
+      </div>
+      <div>
+        <div class="fct">Platform</div>
+        <ul class="fcl">
+          <li><a onclick="go('features')">Features</a></li>
+          <li><a onclick="go('how')">How it works</a></li>
+          <li><a onclick="go('pricing')">Pricing</a></li>
+          <li><a href="https://app.1finforce.com/signup">Get started</a></li>
+          <li><a href="https://app.1finforce.com/sign_in">Sign in</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fct">Company</div>
+        <ul class="fcl">
+          <li><a onclick="go('contact')">Contact us</a></li>
+          <li><a onclick="go('contact')">Book a demo</a></li>
+          <li><a href="#">Privacy policy</a></li>
+          <li><a href="#">Terms of service</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fct">Who we help</div>
+        <ul class="fcl">
+          <li><a href="#">Wholesalers</a></li>
+          <li><a href="#">Retailers</a></li>
+          <li><a href="#">Distributors</a></li>
+          <li><a href="#">Trading businesses</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fb">
+      <span>© 2025 1FinForce. All rights reserved.</span>
+      <span style="display:flex;align-items:center;gap:8px;">
+        <span style="width:10px;height:10px;border-radius:50%;background:var(--steel);display:inline-block;"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:var(--khaki);display:inline-block;"></span>
+        One platform. Total business visibility.
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+/* ── VALUE GRAPH DATA ── */
+const VG_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const VG_DATA = {
+  revenue: {
+    title: 'Monthly Revenue (R\u2019000) — Spreadsheets vs 1FinForce',
+    // Flat, erratic growth without a system. Modest 15-18% natural drift.
+    // After 1FinForce: fewer lost sales from stockouts drives 18-22% uplift over 6 months.
+    before: [68,64,71,66,70,69,72,70,74,71,75,73],
+    after:  [68,64,71,66,70,76,81,87,91,96,101,106],
+    beforeLabel:'Spreadsheet-managed (R\'000)',
+    afterLabel: 'With 1FinForce (R\'000)',
+    unit:'R',suffix:'k',
+    kpis:[
+      {val:'+18%',lbl:'Typical revenue uplift in 6 months from fewer lost sales',c:'var(--steel)'},
+      {val:'−22%',lbl:'Reduction in lost sales due to stockouts',c:'var(--khaki)'},
+      {val:'R28k',lbl:'Average monthly revenue recovered from better stock control',c:'var(--steel)'},
+      {val:'6 wks',lbl:'Average time to first measurable improvement',c:'var(--khaki)'},
+    ]
+  },
+  stock: {
+    title: 'Stock Accuracy % — Spreadsheets vs 1FinForce',
+    // Manual tracking: 62-72% accuracy is realistic for SMBs using spreadsheets.
+    // Errors compound from forgotten adjustments, WhatsApp orders, manual counts.
+    // 1FinForce: auto-updates on every sale/purchase. Reaches 92-95% within 3 months.
+    before: [68,65,70,63,67,64,69,66,71,65,68,67],
+    after:  [68,65,70,63,67,78,85,89,91,93,94,95],
+    beforeLabel:'Spreadsheet-managed (%)',
+    afterLabel: 'With 1FinForce (%)',
+    unit:'',suffix:'%',
+    kpis:[
+      {val:'95%',lbl:'Stock accuracy reached within 3 months — up from ~67%',c:'var(--steel)'},
+      {val:'−80%',lbl:'Reduction in stock discrepancies vs manual tracking',c:'var(--khaki)'},
+      {val:'0',lbl:'Manual stock counts needed — every sale auto-updates inventory',c:'var(--steel)'},
+      {val:'Real-time',lbl:'Stock levels update instantly across all products',c:'var(--khaki)'},
+    ]
+  },
+  cash: {
+    title: 'Days to Cash Flow Insight — Spreadsheets vs 1FinForce',
+    // Without a system: business owners find out their cash position 25-35 days late.
+    // Reconciling spreadsheets, chasing invoices, manual bank matching.
+    // With 1FinForce: same-day visibility. Days-to-insight drops from ~28 to ~1.
+    before: [29,31,28,32,30,29,31,30,32,28,31,30],
+    after:  [29,31,28,32,30,18,10,5,3,2,1,1],
+    beforeLabel:'Spreadsheet-managed (days lag)',
+    afterLabel: 'With 1FinForce (days lag)',
+    unit:'',suffix:'d',
+    yReverse: true,
+    kpis:[
+      {val:'28 → 1',lbl:'Days to cash flow insight — from month-end to same day',c:'var(--steel)'},
+      {val:'−8 hrs',lbl:'Weekly hours saved on manual financial reconciliation',c:'var(--khaki)'},
+      {val:'Live P&L',lbl:'Profit and loss updated in real time as you trade',c:'var(--steel)'},
+      {val:'Day 1',lbl:'Full cash and inventory value visible from your first login',c:'var(--khaki)'},
+    ]
+  }
+};
+
+let vgChart = null;
+let currentGraph = 'revenue';
+
+function initVgChart() {
+  const canvas = document.getElementById('vgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const d = VG_DATA.revenue;
+
+  // Activation line plugin
+  const activationPlugin = {
+    id:'activation',
+    afterDraw(chart) {
+      const xScale = chart.scales.x;
+      const yScale = chart.scales.y;
+      const x = xScale.getPixelForValue(5);
+      const ctx2 = chart.ctx;
+      ctx2.save();
+      ctx2.beginPath();
+      ctx2.moveTo(x, yScale.top);
+      ctx2.lineTo(x, yScale.bottom);
+      ctx2.strokeStyle = 'rgba(74,144,184,0.3)';
+      ctx2.setLineDash([4,4]);
+      ctx2.lineWidth = 1;
+      ctx2.stroke();
+      ctx2.restore();
+    }
+  };
+
+  vgChart = new Chart(ctx, {
+    type: 'line',
+    plugins: [activationPlugin],
+    data: {
+      labels: VG_MONTHS,
+      datasets: [
+        {
+          label: d.beforeLabel,
+          data: d.before,
+          borderColor: 'rgba(255,255,255,0.2)',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          borderDash: [5,4],
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          tension: 0.4,
+        },
+        {
+          label: d.afterLabel,
+          data: d.after,
+          borderColor: '#4A90B8',
+          backgroundColor: 'rgba(74,144,184,0.08)',
+          fill: true,
+          borderWidth: 2.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointBackgroundColor: '#4A90B8',
+          tension: 0.4,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 900, easing: 'easeInOutQuart' },
+      interaction: { mode:'index', intersect:false },
+      plugins: {
+        legend: { display:false },
+        tooltip: {
+          backgroundColor: '#243444',
+          borderColor: 'rgba(74,144,184,0.3)',
+          borderWidth: 1,
+          titleColor: '#FFFFFF',
+          bodyColor: 'rgba(255,255,255,0.7)',
+          padding: 10,
+          callbacks: {
+            label(ctx2) {
+              const d2 = VG_DATA[currentGraph];
+              return ` ${ctx2.dataset.label}: ${d2.unit}${ctx2.parsed.y}${d2.suffix}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color:'rgba(255,255,255,0.05)', drawBorder:false },
+          ticks: { color:'rgba(255,255,255,0.3)', font:{size:11} }
+        },
+        y: {
+          grid: { color:'rgba(255,255,255,0.05)', drawBorder:false },
+          ticks: {
+            color:'rgba(255,255,255,0.3)', font:{size:11},
+            callback(v) {
+              const d2 = VG_DATA[currentGraph];
+              return d2.unit+v+d2.suffix;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function switchGraph(key, btn) {
+  currentGraph = key;
+  document.querySelectorAll('.vg-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  const d = VG_DATA[key];
+  // Update datasets
+  vgChart.data.datasets[0].data = d.before;
+  vgChart.data.datasets[0].label = d.beforeLabel;
+  vgChart.data.datasets[1].data = d.after;
+  vgChart.data.datasets[1].label = d.afterLabel;
+  // For cash flow (days lag), lower is better — reverse y axis so improvement goes UP visually
+  vgChart.options.scales.y.reverse = !!d.yReverse;
+  vgChart.options.scales.y.ticks.callback = v => d.unit+v+d.suffix;
+  vgChart.options.plugins.tooltip.callbacks.label = ctx2 => {
+    const suffix = d.yReverse ? ' days lag' : d.unit+ctx2.parsed.y+d.suffix;
+    return ` ${ctx2.dataset.label}: ${d.yReverse ? ctx2.parsed.y+' days' : d.unit+ctx2.parsed.y+d.suffix}`;
+  };
+  // Update note text
+  const noteEl = document.getElementById('vgNote');
+  if(noteEl) noteEl.textContent = d.yReverse
+    ? 'Lower = better · Dashed = spreadsheet-managed · Solid = with 1FinForce · Illustrative example'
+    : 'Dashed = spreadsheet-managed · Solid = with 1FinForce · Illustrative example based on typical SMB outcomes';
+  vgChart.update();
+  // Update title
+  document.getElementById('vgChartTitle').textContent = d.title;
+  // Update KPIs
+  const kpiEl = document.getElementById('vgKpis');
+  kpiEl.innerHTML = d.kpis.map(k=>`
+    <div class="vg-kpi">
+      <div class="vg-kpi-val" style="color:${k.c};">${k.val}</div>
+      <div class="vg-kpi-lbl">${k.lbl}</div>
+    </div>`).join('');
+}
+
+
+const flowData=[
+  {tag:'Step 1 — Inventory',title:'Your stock. Always accurate.',bullets:['Add products with quantities and supplier costs','Set reorder thresholds so you never run out','Inventory becomes the backbone everything else connects to'],kpis:[{l:'Total products',v:'248 items'},{l:'Stock value',v:'R142,800'},{l:'Low stock alerts',v:'3 items'},{l:'Suppliers linked',v:'12 active'}]},
+  {tag:'Step 2 — Orders & Sales',title:'Sales recorded. Inventory auto-updated.',bullets:['Log a product sale and stock drops automatically','Create purchase orders — inbound stock queued','No manual stock adjustments after every transaction'],kpis:[{l:'Sales today',v:'R8,420'},{l:'Orders pending',v:'14 open'},{l:'Best seller',v:'Product A'},{l:'Fulfillment rate',v:'94%'}]},
+  {tag:'Step 3 — Logistics',title:'Track every shipment end to end.',bullets:['See all shipments: pending, in transit, delivered','Linked to the orders and inventory they affect','Delay alerts before they become customer problems'],kpis:[{l:'In transit',v:'6 shipments'},{l:'Due today',v:'2 deliveries'},{l:'Overdue',v:'1 flagged'},{l:'Avg delivery',v:'3.2 days'}]},
+  {tag:'Step 4 — Finance',title:'Cash flow connected to reality.',bullets:['Revenue updates as sales are recorded','See cash tied up in inventory vs free cash','Cost of inventory live — not at month end'],kpis:[{l:'Revenue MTD',v:'R84,200'},{l:'Cash in inventory',v:'R142,800'},{l:'Free cash',v:'R38,400'},{l:'Inventory cost',v:'R96,500'}]},
+  {tag:'Step 5 — Dashboard',title:'One view. Every number aligned.',bullets:['All four modules feed into a single central dashboard','Business owner sees inventory, finance, logistics, orders — live','No mismatched data. No reconciliation. One source of truth.'],kpis:[{l:'Data sources',v:'4 modules'},{l:'Update frequency',v:'Real-time'},{l:'Manual sync needed',v:'Zero'},{l:'Reconciliation work',v:'Eliminated'}]}
+];
+
+function flowClick(idx,el){
+  document.querySelectorAll('.flow-step').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  const d=flowData[idx];
+  const kpis=d.kpis.map(k=>`<div class="fv-kpi"><div class="fv-kpi-lbl">${k.l}</div><div class="fv-kpi-val">${k.v}</div></div>`).join('');
+  const bullets=d.bullets.map(b=>`<li><span class="fv-ck">✓</span>${b}</li>`).join('');
+  document.getElementById('flowVis').innerHTML=`<div class="fv-tag">${d.tag}</div><div class="fv-title">${d.title}</div><ul class="fv-list">${bullets}</ul><div class="fv-kpis">${kpis}</div>`;
+}
+
+function kpiTab(id,btn){
+  document.querySelectorAll('.ktab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.kpi-panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('kpi-'+id).classList.add('on');
+}
+
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>{
+    initReveal();
+    // Force visible anything near top of new page
+    document.querySelectorAll('#page-'+page+' .reveal').forEach(el=>{
+      const r=el.getBoundingClientRect();
+      if(r.top<window.innerHeight+200)el.classList.add('in');
+    });
+  },150);
+}
+
+function toggleMob(){document.getElementById('mobMenu').classList.toggle('open');}
+
+function faq(btn){
+  const item=btn.parentElement;
+  const open=item.classList.contains('open');
+  document.querySelectorAll('.fi.open').forEach(i=>i.classList.remove('open'));
+  if(!open)item.classList.add('open');
+}
+
+function sendForm(){}
+// Netlify form handled via event listener
+
+function buildBars(){
+  const c=document.getElementById('heroBars');
+  if(!c)return;
+  const vals=[28,42,35,55,48,70,52,80,65,90,75,100];
+  const kvals=[20,30,28,40,35,50,40,60,50,70,58,80];
+  c.innerHTML='';
+  vals.forEach((h,i)=>{
+    const b=document.createElement('div');
+    b.className='bar'+(i===vals.length-1?' hi':'');
+    b.style.height=h+'%';
+    c.appendChild(b);
+  });
+}
+
+function initReveal(){
+  const els=document.querySelectorAll('.reveal');
+  // Show all immediately - no threshold tricks
+  els.forEach(el=>el.classList.add('in'));
+  // Then set up observer for future scrolls
+  if('IntersectionObserver' in window){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
+    },{threshold:0,rootMargin:'0px 0px 0px 0px'});
+    document.querySelectorAll('.reveal:not(.in)').forEach(el=>obs.observe(el));
+  }
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.background=window.scrollY>30?'rgba(7,17,28,.97)':'rgba(7,17,28,.88)';
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  buildBars();
+  initReveal();
+  initVgChart();
+  // Force show elements in viewport on initial load
+  setTimeout(()=>{
+    document.querySelectorAll('.page.active .reveal').forEach(el=>{
+      const r=el.getBoundingClientRect();
+      if(r.top<window.innerHeight+200)el.classList.add('in');
+    });
+    // Also show prob-strip and logos-bar which may not have reveal
+    document.querySelectorAll('.prob-strip,.logos-bar').forEach(el=>{
+      el.style.opacity='1';el.style.transform='none';
+    });
+  },200);
+
+  // Netlify Forms handler
+  const form=document.getElementById('contactForm');
+  if(form){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      const data=new FormData(form);
+      fetch('/',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:new URLSearchParams(data).toString()
+      })
+      .then(()=>{
+        form.style.display='none';
+        document.getElementById('formOk').style.display='block';
+      })
+      .catch(()=>alert('Something went wrong. Please email us at sales@1finforce.com'));
+    });
+  }
+});
+</script>
+</body>
+</html>
